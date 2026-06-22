@@ -1,11 +1,11 @@
 import { from } from "node:stream/iter";
-import { expenseBody } from '../Requestbody/expenseRequestbody';
+import { budgetBody } from '../Requestbody/budgetRequestbody';
 import { Request, Response, NextFunction } from 'express'
-export const expenseValidate = (req: Request, res: Response, next: NextFunction) => {
-     const { Expense, Description, Category }: expenseBody = req.body;
+export const budgetValidate = (req: Request, res: Response, next: NextFunction) => {
+    const { Amount, Description, StartDate, EndDate }: budgetBody = req.body;
     if (req.body.Description === ('')) {
         res.json("Description must be entered");
-    } else if (!Number(Expense)) {
+    } else if (!Number(Amount)) {
         res.json("Enter Expense in Digits");
     } else {
         next();

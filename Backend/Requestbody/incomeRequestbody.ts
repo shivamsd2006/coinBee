@@ -1,5 +1,7 @@
 
-           export interface incomeBody{
-          Income:number,
-          Type:string,
-      }
+export interface incomeBody {
+    Income: number,
+    Description: string,
+    Type: string,
+
+}
