@@ -1,6 +1,9 @@
-import React from 'react'
-import { useState } from 'react';
 
+import { useState } from 'react';
+import { CirclePlus } from 'lucide-react';
+import Button from '../../UiComponents/Button';
+import Input from '../../UiComponents/Input';
+ 
 
 
 const Expense = () => {
@@ -8,6 +11,7 @@ const Expense = () => {
     const [description, setDescription] = useState('')
     const [category, setCategory] = useState('Groceries')
     const [descriptionError, setDescriptionError] = useState('')
+   
 
     const user = {
         Expense: Number(expense),
@@ -58,48 +62,57 @@ const Expense = () => {
 
 
 
+   
+
     return (
-        <>
-            <div>
-                <h4 className='text-[#FFFFFF] font-syne font-semibold'>Add Expense:</h4>
-            </div>
-            <section>
-                <form onSubmit={formData}>
-                    <label htmlFor="expenseIn" className='text-[#8E8E93]'>Amount:</label>
-                    <input className='text-[#8E8E93]'type="number" value={expense} onChange={(e) => setExpense(e.target.value)} />
-
-                    <label htmlFor="description" className='text-[#8E8E93]'>Description:</label>
-                    <input className='text-[#8E8E93]'type="text" value={description} onChange={checkDescriptionError} />
-
-                    <label htmlFor="category" className=' text-[#8E8E93]' > Category</label>
-                    <select className='text-[#8E8E93]' id='category' value={category} onChange={(e) => setCategory(e.target.value)}>
-                        <option value="Groceries" className=' text-[#8E8E93]' >Groceries</option>
-                        <option value="Travel" className=' text-[#8E8E93]'>Travel</option>
-                        <option value="Clothes" className=' text-[#8E8E93]'>Clothes</option>
+       
+           
+                <form onSubmit={formData}className='bg-gray-900 flex flex-col  h-[90%] w-[60%] rounded-xl  p-4' >
+                     <div>
+                <h4 className='text-[#FFFFFF] font-syne font-semibold text-[1.2rem]'>Add Expense:</h4>
+                   </div>
+                   <div className='mt-2'>
+                    <Input id='Amount' type='number'value={expense} onChange={(e) => setExpense(e.target.value)}/>
+                   </div>
+                   <div className='mt-2'>
+                    <Input id='Description' type='text'  value={description} onChange={checkDescriptionError}/>
+                   </div>
+                    
+                    <label htmlFor="category" className=' text-[#8E8E93] text-[1.2rem] mt-2' > Category</label>
+                    <select className='text-[#8E8E93]' id='category text-[1.2rem] border-2 border-[#8E8E93] rounded-xl' value={category} onChange={(e) => setCategory(e.target.value)}>
+                        <option value="Groceries" >Groceries</option>
+                        <option value="Travel">Travel</option>
+                        <option value="Clothes">Clothes</option>
 
                     </select>
 
                     <p>{descriptionError}</p>
-
-
-                    <button type='submit' className='text-[#FFFFFF]'>Add</button>
+                     
+                   <div className='mt-2 flex justify-center '>
+                   <Button title = 'Add'/>
+                    </div>
                 </form>
-            </section>
-        </>
     )
+
 
 }
 
 const Report = () => {
+    const [isClicked,setIsClicked] = useState(false)
     return (
         <>
-            <div>
+            <div className='h-screen w-screen  flex items-end justify-center gap-4'>
 
-                <div>
-                    <Expense />
+                <div className=' w-[50%] h-[70%]  flex flex-col justify-end items-center gap-3'>
+                    {isClicked&& <Expense/>}
+                   
+                    <button onClick={()=>{setIsClicked(true)}} className='w-10 h-10 size-5'>
+                         <CirclePlus className="w-6 h-6 size-7 text-white "/>
+                    </button>
+                   
                 </div>
             </div>
-
+ 
         </>
     )
 }
