@@ -12,7 +12,7 @@ function App() {
 
     <div className='bg-[#0B0B0C] h-screen w-screen border-5 flex flex-col '>
       <Header />
-      <div className='flex flex-col border-2  h-full w-full'>
+      <div className='flex flex-col border-2  h-full w-full relative '>
         <Sidebar />
 
         <Routes>

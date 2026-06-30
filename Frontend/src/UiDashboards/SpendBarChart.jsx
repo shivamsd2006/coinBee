@@ -1,5 +1,5 @@
 import React from 'react'
-import { Bar, BarChart, Tooltip, XAxis, YAxis } from 'recharts';
+import {ResponsiveContainer, Bar, BarChart, Tooltip, XAxis, YAxis } from 'recharts';
 
 
 
@@ -60,15 +60,17 @@ function CustomTooltip({ payload, label, active }) {
 
     return null;
 }
-function SpendBarChart({stateData}) {
+function SpendBarChart({ stateData }) {
     return (
-        <BarChart width={900} height={500} data={stateData} margin={margin}>
-            <XAxis dataKey="Amount" />
+        <ResponsiveContainer width="100%" height="100%" aspect={2}>
+        <BarChart data={stateData} margin={margin}>
+            <XAxis dataKey="name" />
             <YAxis />
             <Tooltip content={CustomTooltip} defaultIndex={6} active />
             <Bar dataKey="uv" fill="white"  barSize={50}  />
            
         </BarChart>
+        </ResponsiveContainer>
     );
 }
 export default SpendBarChart

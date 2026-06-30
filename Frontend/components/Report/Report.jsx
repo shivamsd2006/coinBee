@@ -4,8 +4,6 @@ import { CirclePlus } from 'lucide-react';
 import Button from '../../UiComponents/Button';
 import Input from '../../UiComponents/Input';
 import SpendBarChart from '../../src/UiDashboards/SpendBarChart';
-  import "slick-carousel/slick/slick.css";
-    import "slick-carousel/slick/slick-theme.css";
 import SpendPieChart from '../../src/UiDashboards/SpendPieChart';
 import SpendLineChart from '../../src/UiDashboards/SpendLineChart';
  import SliderImport from "react-slick";
@@ -21,17 +19,6 @@ const Expense = ({ savedData }) => {
     const [description, setDescription] = useState('')
     const [category, setCategory] = useState('Groceries')
     const [date, setDate] = useState('')
-    const [descriptionError, setDescriptionError] = useState('')
-
-
-    const checkDescriptionError = (e) => {
-        if (e.target.value == 1) {
-            setDescriptionError('Error')
-        } else {
-            setDescription(e.target.value)
-        }
-
-    }
 
 
     const formData = (e) => {
@@ -105,7 +92,7 @@ const Expense = ({ savedData }) => {
                 <Input id='Amount' type='number' value={expense} onChange={(e) => setExpense(e.target.value)} />
             </div>
             <div className='mt-2'>
-                <Input id='Description' type='text' value={description} onChange={checkDescriptionError} />
+                <Input id='Description' type='text' value={description} onChange={(e)=> setDescription(e.target.value)} />
             </div>
             <div>
                 <Input id='Date' type='date' value={date} onChange={(e) => setDate(e.target.value)} />
@@ -119,7 +106,7 @@ const Expense = ({ savedData }) => {
 
             </select>
 
-            <p>{descriptionError}</p>
+          
 
             <div className='mt-2 flex justify-center '>
                 <Button title='Add' />
@@ -142,7 +129,8 @@ const Report = () => {
    const [isClicked, setIsClicked] = useState(false)
     const [barChartData, setBarChartData] = useState([])
     function fetchResult(data) {
-        setBarChartData(data)
+        const userData = [...data,userData]
+        setBarChartData(userData)
     }
 
     const formattedData = barChartData.map(item => ({
@@ -157,19 +145,19 @@ const Report = () => {
 
     return (
         <>
-            <div className='h-full w-full  flex items-end justify-center gap-4'>
+            <div className='h-full w-full  flex items-end justify-center gap-4 relative'>
                 <div className='h-full w-full flex items-center justify-center'>
 
 
-                    <div className="slider-container h-full">
-                        <Slider {...settings} >
-                            <div>
+                    <div className="slider-container h-[300px] w-[300px] relative">
+                        <Slider {...settings} className='h-[400px] w-full'>
+                            <div className='h-[400px] w-[300px]'>
                                 <SpendBarChart stateData={formattedData} />
                             </div>
-                            <div>
+                            <div className='h-[400px] full'>
                                 <SpendPieChart />
                             </div>
-                            <div>
+                            <div className='h-[400px] full'>
                                 <SpendLineChart />
                             </div>
 
@@ -181,10 +169,10 @@ const Report = () => {
 
                 </div>
 
-                <div className=' w-[50%] h-[70%]  flex flex-col justify-end items-center gap-3 fixed'>
+                <div className=' w-[50%] h-[70%]  flex flex-col justify-end items-center gap-3 absolute bottom-0'>
                     {isClicked && <Expense savedData={fetchResult} />}
 
-                    <button onClick={() => { setIsClicked(true) }} className='w-10 h-10 size-5'>
+                    <button onClick={() => { setIsClicked(true) }} className='w-10 h-10 size-5 cursor:pointer'>
                         <CirclePlus className="w-6 h-6 size-7 text-white " />
                     </button>
 

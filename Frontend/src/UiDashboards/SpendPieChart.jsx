@@ -1,4 +1,4 @@
-import { Pie, PieChart, Sector, Tooltip } from 'recharts';
+import {ResponsiveContainer, Pie, PieChart, Sector, Tooltip } from 'recharts';
 
 
 // #region Sample data
@@ -72,6 +72,7 @@ export default function SpendPieChart({
   defaultIndex = undefined,
 }) {
   return (
+       <ResponsiveContainer width="100%" height="100%">
     <PieChart
       style={{ width: '100%', maxWidth: '500px', maxHeight: '80vh', aspectRatio: 1 }}
       responsive
@@ -96,5 +97,6 @@ export default function SpendPieChart({
       <Tooltip content={() => null} defaultIndex={defaultIndex} />
      
     </PieChart>
+    </ResponsiveContainer>
   );
 }

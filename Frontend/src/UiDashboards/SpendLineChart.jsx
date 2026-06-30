@@ -1,4 +1,4 @@
-import { CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis } from 'recharts';
+import { ResponsiveContainer,CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis } from 'recharts';
 
 
 // #region Sample data
@@ -44,6 +44,7 @@ const data = [
 // #endregion
 export default function SpendLineChart() {
   return (
+     <ResponsiveContainer width="100%" height="100%">
     <LineChart
       style={{ width: '100%', aspectRatio: 1.618, maxWidth: 600 }}
       responsive
@@ -62,5 +63,6 @@ export default function SpendLineChart() {
       <Legend align="right" />
       <Tooltip />
     </LineChart>
+    </ResponsiveContainer>
   );
 }
