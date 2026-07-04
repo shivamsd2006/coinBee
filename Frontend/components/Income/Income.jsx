@@ -1,93 +1,41 @@
 
 import { useState } from 'react'
+import IncomeForm from '../IncomeForm/IncomeForm'
+import { CirclePlus } from 'lucide-react';
+import Button from '../../UiComponents/Button';
+import IncomeTypeSwitcher from '../../UiComponents/IncomeTypeSwitcher';
+
+const arr = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,,7,18,19,20,21,22,23,24,25,26,27,28];
+const item = arr.map((i)=>{
+   return(<div className='bg-gray-800 w-full h-[70px] mb-2 shrink-0'>{i}</div>) 
+
+})
 
 const Income = () => {
+    const [isClicked, setIsClicked] = useState(false)
+
+    return (
+        <>
+            <div  className='h-full w-full  flex flex-col items-center justify-center gap-4 relative'>
+                 <div className='absolute right-5 top-8 '>
+                    <IncomeTypeSwitcher/>
+                 </div>
+                 <div className='flex flex-col w-full h-[60vh] overflow-auto [&::-webkit-scrollbar]:hidden'>
+                      {item}
+                 </div>
+                {isClicked && <div className=' w-[50%] h-[30em]  flex flex-col justify-end items-center mb-15 p-4 absolute bottom-0'>
+                    <IncomeForm />
+                </div>}
+                <div className='flex justify-center items-center  h-[10%] w-[10%] absolute bottom-0'>
+                    <Button title='Income' onClick={() => { setIsClicked(!isClicked) }} />
+
+                </div>
+
+            </div>
+        </>
+    )
 
 
-  const [income, setIncome] = useState("")
-  const [type, setType] = useState('Salary')
-  const [description, setDescription] = useState('')
-  const [descriptionError, setDescriptionError] = useState('')
-
-  const user = {
-    Income: Number(income),
-    Type: type,
-    Description: description
-
-  }
-
-
-
-  const checkDescriptionError = (e) => {
-    if (e.target.value == 1) {
-      setDescriptionError('Error')
-    } else {
-      setDescription(e.target.value)
-    }
-
-  }
-
-
-  const formData = (e) => {
-    e.preventDefault();
-
-
-    sendData(user);
-
-  }
-
-  async function sendData(data) {
-    try {
-      const response = await fetch("http://localhost:5000/incomeRoutes/add", {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json;charset=utf-8'
-        },
-        body: JSON.stringify(data)
-      })
-      if (response.ok) {
-        const result = await response.json();
-
-        console.log(result);
-      } else {
-        console.log("http error ", response.status);
-        throw new Error('error');
-      }
-
-    } catch (error) {
-      console.error("network error", error.message);
-    }
-
-  }
-
-  return (
-    <>
-      <section>
-        <form onSubmit={formData}>
-          <label htmlFor="expenseIn">Amount:</label>
-          <input type="number" value={income} onChange={(e) => setIncome(e.target.value)} />
-
-
-          <label htmlFor="description">Description:</label>
-          <input type="text" value={description} onChange={checkDescriptionError} />
-
-          <label htmlFor="category" > Type</label>
-          <select id='category' value={type} onChange={(e) => setType(e.target.value)}>
-            <option value="Salary" >Salary</option>
-            <option value="Deposite">Deposite</option>
-            <option value="Others">Others</option>
-
-          </select>
-
-          <p>{descriptionError}</p>
-
-
-          <button type='submit'>Add</button>
-        </form>
-      </section>
-
-    </>
-  )
 
 }
 export default Income

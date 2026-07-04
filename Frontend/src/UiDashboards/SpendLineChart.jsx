@@ -44,7 +44,7 @@ const data = [
 // #endregion
 export default function SpendLineChart() {
   return (
-     <ResponsiveContainer width="100%" height="100%">
+     <ResponsiveContainer width="99%" height="99%">
     <LineChart
       style={{ width: '100%', aspectRatio: 1.618, maxWidth: 600 }}
       responsive

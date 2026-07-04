@@ -72,7 +72,7 @@ export default function SpendPieChart({
   defaultIndex = undefined,
 }) {
   return (
-       <ResponsiveContainer width="100%" height="100%">
+       <ResponsiveContainer width="99%" height="99%">
     <PieChart
       style={{ width: '100%', maxWidth: '500px', maxHeight: '80vh', aspectRatio: 1 }}
       responsive
