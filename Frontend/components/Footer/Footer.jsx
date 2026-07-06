@@ -2,9 +2,9 @@ import React from 'react'
 
 const Footer = () => {
   return (
-    <footer className=' relative bottom-[1%] '>
+    <footer className=' relative'>
       <div>
-        <h3 className='text-black'>FOOTER</h3>
+    
       </div>
       </footer>
   )
