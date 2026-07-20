@@ -10,9 +10,9 @@ function App() {
 
   return (
 
-    <div className='bg-linear-to-br from-green-400 to-slate-50 h-screen w-screen border-5 flex flex-col '>
+    <div className='bg-white h-screen w-screen  flex flex-col '>
       <Header />
-      <div className='flex flex-col  h-full w-full '>
+      <div className='flex flex-col  h-full w-full items-center '>
         <Sidebar />
 
         <Routes>

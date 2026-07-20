@@ -1,22 +1,11 @@
-
-import { useEffect, useState } from 'react';
-import Button from '../../UiComponents/Button';
-import Input from '../../UiComponents/Input';
-const ExpenseForm = ({ savedData }) => {
-    const [expense, setExpense] = useState("")
+import { useState } from "react"
+import Input from "../../UiComponents/Input"
+import Button from "../../UiComponents/Button"
+const BudgetForm = () => {
     const [description, setDescription] = useState('')
     const [category, setCategory] = useState('Groceries')
+    const [amount, setAmount] = useState('')
     const [date, setDate] = useState('')
-
-
-   
-
-    async function deleteData(id) {
-        const deleteInfo = await fetch(`http://localhost:5000/expenseRoutes/delete${id}`,{
-            method:'DELETE'
-        })
-    }
-
 
     const formData = (e) => {
         e.preventDefault();
@@ -32,7 +21,7 @@ const ExpenseForm = ({ savedData }) => {
         console.log('month--->', formattedMonth)
 
         const user = {
-            Expense: Number(expense),
+            Amount: amount,
             Description: description,
             DayName: formattedDayOfWeek,
             MonthName: formattedMonth,
@@ -71,18 +60,15 @@ const ExpenseForm = ({ savedData }) => {
 
 
 
-
-
-
     return (
 
 
         <form onSubmit={formData} className='bg-white  flex flex-col  h-[440px] w-[350px] rounded-xl mt-2 mb-2 mr-2 ml-2 p-8' >
             <div>
-                <h4 className='text-[#FFFFFF] font-syne font-semibold text-[1.2rem]'>Add Expense:</h4>
+                <h4 className='text-[#FFFFFF] font-syne font-semibold text-[1.2rem]'>Set Budget</h4>
             </div>
             <div className='mt-2'>
-                <Input id='Amount' type='number' value={expense} onChange={(e) => setExpense(e.target.value)} />
+                <Input id='Amount' type='number' value={amount} onChange={(e) => setAmount(e.target.value)} />
             </div>
             <div className='mt-2'>
                 <Input id='Description' type='text' value={description} onChange={(e) => setDescription(e.target.value)} />
@@ -104,5 +90,6 @@ const ExpenseForm = ({ savedData }) => {
             </div>
         </form>
     )
+
 }
-export default ExpenseForm;
+export default BudgetForm;

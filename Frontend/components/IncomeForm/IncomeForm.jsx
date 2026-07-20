@@ -64,7 +64,7 @@ const IncomeForm = () => {
 
     return (
         <>
-            <form onSubmit={formData} className='bg-gray-900 flex flex-col  h-[30em] w-[60%] rounded-xl  p-1 transition duration-300'>
+            <form onSubmit={formData} className='bg-white flex flex-col  h-[440px] w-[345px]  rounded-xl  mt-2 mb-2 mr-2 ml-2 p-8'>
                 <div>
                     <h4 className='text-[#FFFFFF] font-syne font-semibold text-[1.2rem]'>Add Income</h4>
                 </div>

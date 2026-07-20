@@ -28,31 +28,35 @@ const settings = {
 }
 const Report = () => {
     const [isClicked, setIsClicked] = useState(false)
-    const [barChartData, setBarChartData] = useState([])
-    function fetchResult(data) {
+    const[ expenseDataDb,setExpenseDataDb] = useState([])
+    const[timeFrame,setTimeFrame] = useState('week')
+     useEffect(() => {
+    
+        async function readData() {
+            const fetchedExpense = await fetch(`http://localhost:5000/expenseRoutes/read?timeframe=${timeFrame}`)
+            const fExpense = await fetchedExpense.json();
+            setExpenseDataDb(fExpense)
+        }
 
-        setBarChartData([data])
-    }
+        readData()
+    },[timeFrame])
 
-    const formattedData = barChartData.map(item => ({
-        name: item.DayName,
-        uv: item.Expense
-    }));
+   
 
 
 
     return (
         <>
-            <div className='h-full w-full  flex flex-col items-center justify-center gap-4 relative'>
+            <div className='h-[80%] w-full  flex flex-col items-center justify-center gap-4 relative'>
                 <div className='absolute left-10 top-10' >
-                    <ExpenseDateSwitcher />
+                    <ExpenseDateSwitcher onSwitch={setTimeFrame}/>
                 </div>
 
 
                 <div className="slider-container h-[450px] w-[450px] w-full flex items-center justify-center relative">
                     <Slider {...settings} className='h-[400px] w-[400px]'>
                         <div className='h-[300px] w-[300px]'>
-                            <SpendBarChart stateData={formattedData} />
+                            <SpendBarChart stateData={expenseDataDb} />
                         </div>
                         <div className='h-[300px] w-[300px]'>
                             <SpendPieChart />
@@ -65,8 +69,8 @@ const Report = () => {
                 </div>
 
 
-                {isClicked && <div className=' w-[50%] h-[30em]  flex flex-col justify-end items-center mb-15 p-4 absolute bottom-0'>
-                    <ExpenseForm savedData={fetchResult} />
+                {isClicked && <div className=' w-[352px] h-[453px] bg-linear-to-br from-green-400 to-slate-50 flex flex-col justify-end items-center mb-15  absolute bottom-0 rounded-xl'>
+                    <ExpenseForm  />
                 </div>}
                 <div className='flex justify-center items-center  h-[10%] w-[10%] absolute bottom-0'>
                    <Button title='Expense'  onClick={() => { setIsClicked(!isClicked) }}/>

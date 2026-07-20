@@ -14,16 +14,68 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  posts Post[]
+  id          Int           @id @default(autoincrement())
+  name        String?
+  Transaction Transaction[]
+  Budget      Budget[]
+
+  @@map("user")
 }
 
-model Post {
-  id        Int     @id @default(autoincrement())
-  title     String
-  content   String?
-  author    User    @relation(fields: [authorId], references: [id])
-  authorId  Int
+model Transaction {
+  transactionId Int          @id @default(autoincrement())
+  userId        Int
+  User          User         @relation(fields: [userId], references: [id])
+  Deposit       Deposit[]
+  Withdrawal    Withdrawal[]
+  date          DateTime
+
+  @@map("transactions")
+}
+
+model Budget {
+  userId   Int
+  budgetId Int  @id @default(autoincrement())
+  User     User @relation(fields: [userId], references: [id])
+
+  amount      Float
+  description String?
+  date        DateTime
+
+  @@map("budget")
+}
+
+model Deposit {
+  transactionId Int
+  depositId     Int         @id @default(autoincrement())
+  Transaction   Transaction @relation(fields: [transactionId], references: [transactionId])
+  categoryId    Int
+  Category      Category    @relation(fields: [categoryId], references: [id])
+  amount        Float
+  description   String?
+  date          DateTime
+
+  @@map("deposit")
+}
+
+model Withdrawal {
+  transactionId Int
+  withdrawalId  Int         @id @default(autoincrement())
+  Transaction   Transaction @relation(fields: [transactionId], references: [transactionId])
+  categoryId    Int
+  Category      Category    @relation(fields: [categoryId], references: [id])
+  amount        Float
+  description   String?
+  date          DateTime
+
+  @@map("withdrawal")
+}
+
+model Category {
+  id            Int          @id @default(autoincrement())
+  name          String       @unique
+  deposits      Deposit[]
+  withdrawals   Withdrawal[]
+
+  @@map("categories")
 }
