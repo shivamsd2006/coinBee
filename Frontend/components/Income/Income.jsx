@@ -7,7 +7,7 @@ import IncomeTypeSwitcher from '../../UiComponents/IncomeTypeSwitcher';
 
 const arr = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,,7,18,19,20,21,22,23,24,25,26,27,28];
 const item = arr.map((i)=>{
-   return(<div className='bg-white w-full h-[15%] mb-2 shrink-0 flex justify-center items-center'>{i}</div>) 
+   return(<div key={i} className='bg-white w-full h-[15%] mb-2 shrink-0 flex justify-center items-center'>{i}</div>) 
 
 })
 

@@ -1,87 +1,135 @@
-
-import { useState } from 'react';
-import { CirclePlus } from 'lucide-react';
-
-import SpendBarChart from '../../src/UiDashboards/SpendBarChart';
-import SpendPieChart from '../../src/UiDashboards/SpendPieChart';
-import SpendLineChart from '../../src/UiDashboards/SpendLineChart';
-import SliderImport from "react-slick";
-import ExpenseForm from '../ExpenseForm/ExpenseForm';
+import { useState, useEffect } from 'react';
+import SpendBarChart      from '../../src/UiDashboards/SpendBarChart';
+import SpendPieChart      from '../../src/UiDashboards/SpendPieChart';
+import SpendLineChart     from '../../src/UiDashboards/SpendLineChart';
+import ExpenseForm        from '../ExpenseForm/ExpenseForm';
 import ExpenseDateSwitcher from '../../UiComponents/ExpenseDateSwitcher';
-import Button from '../../UiComponents/Button';
-
-// 2. FORCE Vite to give us the actual component function, not the object wrapper
+import Button             from '../../UiComponents/Button';
+import SliderImport from 'react-slick';
 const Slider = SliderImport.default ? SliderImport.default : SliderImport;
+const CustomPrevArrow = ({ className, style, onClick }) => (
+  <div
+    className={className}
+    style={{
+      ...style,
+      display:        'flex',
+      alignItems:     'center',
+      justifyContent: 'center',
+      background:     'rgba(212,168,67,0.15)',
+      border:         '1px solid rgba(212,168,67,0.4)',
+      borderRadius:   '50%',
+      width:          '35px',
+      height:         '35px',
+      zIndex:         10,
+      left:           '8px',
+    }}
+    onClick={onClick}
+  />
+);
 
-
-
-
+const CustomNextArrow = ({ className, style, onClick }) => (
+  <div
+    className={className}
+    style={{
+      ...style,
+      display:        'flex',
+      alignItems:     'center',
+      justifyContent: 'center',
+      background:     'rgba(212,168,67,0.15)',
+      border:         '1px solid rgba(212,168,67,0.4)',
+      borderRadius:   '50%',
+      width:          '35px',
+      height:         '35px',
+      zIndex:         10,
+      right:          '8px',
+    }}
+    onClick={onClick}
+  />
+);
 
 const settings = {
-    dots: true,
-    // fade: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    waitForAnimate: false
-}
+  dots:           true,
+  infinite:       true,
+  speed:          500,
+  slidesToShow:   1,
+  slidesToScroll: 1,
+  prevArrow:      <CustomPrevArrow />,
+  nextArrow:      <CustomNextArrow />,
+};
+
+const BASE = 'http://localhost:5000/expenseRoutes';
+
 const Report = () => {
-    const [isClicked, setIsClicked] = useState(false)
-    const[ expenseDataDb,setExpenseDataDb] = useState([])
-    const[timeFrame,setTimeFrame] = useState('week')
-     useEffect(() => {
+  const [isClicked,  setIsClicked]  = useState(false);
+  const [timeFrame,  setTimeFrame]  = useState('week');
+
+  
+  const [barData,  setBarData]  = useState([]);
+  const [lineData, setLineData] = useState([]);
+  const [pieData,  setPieData]  = useState([]);
+
+  
+  function loadAllCharts(frame) {
     
-        async function readData() {
-            const fetchedExpense = await fetch(`http://localhost:5000/expenseRoutes/read?timeframe=${timeFrame}`)
-            const fExpense = await fetchedExpense.json();
-            setExpenseDataDb(fExpense)
-        }
+    Promise.all([
+      fetch(`${BASE}/read?timeframe=${frame}`).then(r => r.json()),
+      fetch(`${BASE}/line?timeframe=${frame}`).then(r => r.json()),
+      fetch(`${BASE}/pie?timeframe=${frame}`).then(r => r.json()),
+    ])
+      .then(([bar, line, pie]) => {
+        setBarData(bar);
+        setLineData(line);
+        setPieData(pie);
+      })
+      .catch(err => console.error('Chart fetch failed:', err));
+  }
 
-        readData()
-    },[timeFrame])
+  useEffect(() => {
+    loadAllCharts(timeFrame);
+  }, [timeFrame]);
 
-   
+  return (
+    <div className='h-[80%] w-full flex flex-col items-center justify-center gap-4 relative'>
 
+      <div className='absolute left-10 top-4'>
+        <ExpenseDateSwitcher onSwitch={setTimeFrame} />
+      </div>
 
+      <div className='relative h-[400px] w-full max-w-[600px]'>
+        <Slider {...settings}>
 
-    return (
-        <>
-            <div className='h-[80%] w-full  flex flex-col items-center justify-center gap-4 relative'>
-                <div className='absolute left-10 top-10' >
-                    <ExpenseDateSwitcher onSwitch={setTimeFrame}/>
-                </div>
+          <div key='bar' className='h-[400px] w-full'>
+            <SpendBarChart stateData={barData} />
+          </div>
 
+          <div key='pie' className='h-[400px] w-full'>
+            {/* pieData shape: [{ name, value }] */}
+            <SpendPieChart pieData={pieData} />
+          </div>
 
-                <div className="slider-container h-[450px] w-[450px] w-full flex items-center justify-center relative">
-                    <Slider {...settings} className='h-[400px] w-[400px]'>
-                        <div className='h-[300px] w-[300px]'>
-                            <SpendBarChart stateData={expenseDataDb} />
-                        </div>
-                        <div className='h-[300px] w-[300px]'>
-                            <SpendPieChart />
-                        </div>
-                        <div className='h-[300px] w-[300px]'>
-                            <SpendLineChart />
-                        </div>
+          <div key='line' className='h-[400px] w-full'>
+            {/* lineData shape: [{ name, uv }] — same as bar */}
+            <SpendLineChart lineData={lineData} />
+          </div>
 
-                    </Slider>
-                </div>
+        </Slider>
+      </div>
 
+      {isClicked && (
+        <div className='w-[352px] h-[453px] bg-linear-to-br from-green-400 to-slate-50 flex flex-col justify-end items-center mb-15  absolute bottom-0 rounded-xl'>
+          <ExpenseForm savedData={() => loadAllCharts(timeFrame)} />
+        </div>
+      )}
 
-                {isClicked && <div className=' w-[352px] h-[453px] bg-linear-to-br from-green-400 to-slate-50 flex flex-col justify-end items-center mb-15  absolute bottom-0 rounded-xl'>
-                    <ExpenseForm  />
-                </div>}
-                <div className='flex justify-center items-center  h-[10%] w-[10%] absolute bottom-0'>
-                   <Button title='Expense'  onClick={() => { setIsClicked(!isClicked) }}/>
+      <div className='absolute bottom-0'>
+        <Button
+          title='Expense'
+          onClick={() => setIsClicked(prev => !prev)}
+        />
+      </div>
 
-                   
-                </div>
+    </div>
+  );
+};
 
-            </div>
-
-        </>
-    )
-}
-
-export default Report
+export default Report;

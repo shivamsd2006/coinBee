@@ -2,24 +2,28 @@
 import { useEffect, useState } from 'react';
 import Button from '../../UiComponents/Button';
 import Input from '../../UiComponents/Input';
-const ExpenseForm = ({ savedData }) => {
+const ExpenseForm = ({savedData}) => {
     const [expense, setExpense] = useState("")
     const [description, setDescription] = useState('')
-    const [category, setCategory] = useState('Groceries')
+    const [category, setCategory] = useState('1')
     const [date, setDate] = useState('')
 
 
-   
+
 
     async function deleteData(id) {
-        const deleteInfo = await fetch(`http://localhost:5000/expenseRoutes/delete${id}`,{
-            method:'DELETE'
+        const deleteInfo = await fetch(`http://localhost:5000/expenseRoutes/delete/${id}`, {
+            method: 'DELETE'
         })
     }
 
 
     const formData = (e) => {
         e.preventDefault();
+        if (!date || !expense) {
+            alert('Please fill in Amount and Date');
+            return;
+        }
 
         const [year, month, day] = date.split('-').map(Number);
         const jsDateObject = new Date(year, month - 1, day);
@@ -54,8 +58,12 @@ const ExpenseForm = ({ savedData }) => {
                 body: JSON.stringify(data)
             })
             if (response.ok) {
+                        // tell Report to re-fetch
+                setExpense('');        // clear form
+                setDescription('');
+                setDate('');
+                setCategory('1');
                 const result = await response.json();
-                savedData(result);
 
                 console.log("this is the result--->", result);
             } else {
@@ -93,10 +101,18 @@ const ExpenseForm = ({ savedData }) => {
 
             <label htmlFor="category" className=' text-[#8E8E93] text-[1.2rem] mt-2' > Category</label>
             <select className='text-[#8E8E93] text-[1.2rem] border-2 border-[#8E8E93] rounded-xl p-2' id='category' value={category} onChange={(e) => setCategory(e.target.value)}>
-                <option value="Groceries" >Groceries</option>
-                <option value="Travel">Travel</option>
-                <option value="Clothes">Clothes</option>
-
+                <option value="1" >Groceries</option>
+                <option value="2">Travel</option>
+                <option value="3">Clothes</option>
+                <option value="4">Food</option>
+                <option value="5">EMI</option>
+                <option value="6">Entertainment</option>
+                <option value="7">Pet</option>
+                <option value="8">Housing</option>
+                <option value="9">Saloon</option>
+                <option value="10">Gifts</option>
+                <option value="11">Fuel</option>
+                <option value="12">Gadgets</option>
             </select>
 
             <div className='mt-2 flex justify-center '>

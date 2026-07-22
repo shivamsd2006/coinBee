@@ -1,102 +1,144 @@
-import {ResponsiveContainer, Pie, PieChart, Sector, Tooltip } from 'recharts';
+import { useState } from 'react';
+import {
+  ResponsiveContainer, PieChart, Pie,
+  Cell, Tooltip, Legend
+} from 'recharts';
 
-
-// #region Sample data
-const data = [
-  { name: 'Group A', value: 400 },
-  { name: 'Group B', value: 300 },
-  { name: 'Group C', value: 300 },
-  { name: 'Group D', value: 200 },
+// Gold-to-green color palette for slices
+// Each category gets one of these colors in order
+const SLICE_COLORS = [
+  '#D4A843',  // gold — primary
+  '#4ade80',  // green
+  '#EDD07A',  // light gold
+  '#86efac',  // light green
+  '#B08520',  // dark gold
+  '#22c55e',  // deeper green
+  '#F7E8B5',  // pale gold
+  '#16a34a',  // forest green
+  '#7A5C0F',  // brown gold
+  '#bbf7d0',  // mint
+  '#E2BB57',  // warm gold
+  '#4ade80',  // repeat
 ];
 
-// #endregion
-const renderActiveShape = ({
-  cx,
-  cy,
-  midAngle,
-  innerRadius,
-  outerRadius,
-  startAngle,
-  endAngle,
-  fill,
-  payload,
-  percent,
-  value,
-}) => {
-  const RADIAN = Math.PI / 180;
-  const sin = Math.sin(-RADIAN * (midAngle ?? 1));
-  const cos = Math.cos(-RADIAN * (midAngle ?? 1));
-  const sx = (cx ?? 0) + ((outerRadius ?? 0) + 10) * cos;
-  const sy = (cy ?? 0) + ((outerRadius ?? 0) + 10) * sin;
-  const mx = (cx ?? 0) + ((outerRadius ?? 0) + 30) * cos;
-  const my = (cy ?? 0) + ((outerRadius ?? 0) + 30) * sin;
-  const ex = mx + (cos >= 0 ? 1 : -1) * 22;
-  const ey = my;
-  const textAnchor = cos >= 0 ? 'start' : 'end';
+function CustomTooltip({ active, payload }) {
+  if (active && payload && payload.length) {
+    const entry = payload[0];
+    return (
+      <div style={{
+        background:   '#1a1a18',
+        border:       '1px solid rgba(212,168,67,0.3)',
+        borderRadius: '8px',
+        padding:      '10px 14px',
+      }}>
+        <p style={{ color: entry.payload.fill, margin: 0, fontWeight: 700 }}>
+          {entry.name}
+        </p>
+        <p style={{ color: '#e8e3d8', margin: 0 }}>
+          ₹{entry.value.toLocaleString('en-IN')}
+        </p>
+        <p style={{ color: '#888580', margin: 0, fontSize: 12 }}>
+          {(entry.payload.percent * 100).toFixed(1)}% of total
+        </p>
+      </div>
+    );
+  }
+  return null;
+}
 
+// Custom legend — renders color dot + category name + amount
+const CustomLegend = ({ payload }) => {
+  if (!payload?.length) return null;
   return (
-    <g>
-      <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
-        {payload.name}
-      </text>
-      <Sector
-        cx={cx}
-        cy={cy}
-        innerRadius={innerRadius}
-        outerRadius={outerRadius}
-        startAngle={startAngle}
-        endAngle={endAngle}
-        fill={fill}
-      />
-      <Sector
-        cx={cx}
-        cy={cy}
-        startAngle={startAngle}
-        endAngle={endAngle}
-        innerRadius={(outerRadius ?? 0) + 6}
-        outerRadius={(outerRadius ?? 0) + 10}
-        fill={fill}
-      />
-      <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none" />
-      <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
-      <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#333">{`PV ${value}`}</text>
-      <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor} fill="#999">
-        {`(Rate ${((percent ?? 1) * 100).toFixed(2)}%)`}
-      </text>
-    </g>
+    <div style={{
+      display:       'flex',
+      flexWrap:      'wrap',
+      gap:           '8px 16px',
+      justifyContent: 'center',
+      marginTop:     '8px',
+    }}>
+      {payload.map((entry, i) => (
+        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <div style={{
+            width:        8,
+            height:       8,
+            borderRadius: '50%',
+            background:   entry.color,
+          }} />
+          <span style={{ color: '#888580', fontSize: 11 }}>{entry.value}</span>
+        </div>
+      ))}
+    </div>
   );
 };
 
-export default function SpendPieChart({
-  isAnimationActive = true,
-  defaultIndex = undefined,
-}) {
+// pieData: [{ name: 'Groceries', value: 4200 }, { name: 'Travel', value: 1800 }]
+// name → slice label, value → slice size
+function SpendPieChart({ pieData = [] }) {
+  const [activeIndex, setActiveIndex] = useState(null);
+
+  // if no data, show empty state
+  if (pieData.length === 0) {
+    return (
+      <div style={{
+        height:         '100%',
+        display:        'flex',
+        alignItems:     'center',
+        justifyContent: 'center',
+        color:          '#6b6860',
+        fontSize:       14,
+      }}>
+        No spending data for this period
+      </div>
+    );
+  }
+
   return (
-       <ResponsiveContainer width="99%" height="99%">
-    <PieChart
-      style={{ width: '100%', maxWidth: '500px', maxHeight: '80vh', aspectRatio: 1 }}
-      responsive
-      margin={{
-        top: 50,
-        right: 120,
-        bottom: 0,
-        left: 120,
-      }}
-    >
-      <Pie
-        activeShape={renderActiveShape}
-        data={data}
-        cx="50%"
-        cy="50%"
-        innerRadius="60%"
-        outerRadius="80%"
-        fill="white"
-        dataKey="value"
-        isAnimationActive={isAnimationActive}
-      />
-      <Tooltip content={() => null} defaultIndex={defaultIndex} />
-     
-    </PieChart>
+    <ResponsiveContainer width="99%" height="100%">
+      <PieChart>
+        <defs>
+          {/* glow filter for active slice */}
+          <filter id="pieGlow">
+            <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+            <feMerge>
+              <feMergeNode in="coloredBlur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+
+        <Pie
+          data={pieData}
+          cx="50%"
+          cy="45%"
+          innerRadius="50%"
+          outerRadius="70%"
+          dataKey="value"
+          paddingAngle={3}
+          onMouseEnter={(_, index) => setActiveIndex(index)}
+          onMouseLeave={() => setActiveIndex(null)}
+        >
+          {pieData.map((entry, index) => (
+            <Cell
+              key={`cell-${index}`}
+              fill={SLICE_COLORS[index % SLICE_COLORS.length]}
+              opacity={activeIndex === null || activeIndex === index ? 1 : 0.45}
+              stroke={activeIndex === index
+                ? 'rgba(74,222,128,0.5)'
+                : 'rgba(0,0,0,0.2)'}
+              strokeWidth={activeIndex === index ? 2 : 0.5}
+            />
+          ))}
+        </Pie>
+
+        <Tooltip content={<CustomTooltip />} />
+        <Legend
+          content={<CustomLegend />}
+          verticalAlign="bottom"
+        />
+      </PieChart>
     </ResponsiveContainer>
   );
 }
+
+export default SpendPieChart;
