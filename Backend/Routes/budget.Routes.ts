@@ -1,12 +1,12 @@
 import { Router } from 'express';
 import { budgetValidate } from '../Middlewares/budgetValidate';
-import { putBudget} from '../controller/budget.Controller';
-import { postBudget} from '../controller/budget.Controller';
+import { readBudget, postBudget, deleteBudget, putBudget } from '../controller/budget.Controller';
 
 const router = Router();
-  router.put("/update", budgetValidate,putBudget)
-  router.post("/add", budgetValidate,postBudget )
-  
-export {router as budgetRoutes};
 
+router.get('/read',        readBudget);
+router.post('/add',        budgetValidate, postBudget);
+router.delete('/delete/:id', deleteBudget);
+router.put('/update/:id',  putBudget);
 
+export { router as budgetRoutes };

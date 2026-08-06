@@ -249,7 +249,7 @@ export const readExpense = async (
   }
 };
 
-// CREATE — POST /expenseRoutes/add
+
 export const postExpense = async (
   req: Request,
   res: Response,

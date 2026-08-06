@@ -11,7 +11,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
- 
 }
 
 model User {
@@ -35,13 +34,16 @@ model Transaction {
 }
 
 model Budget {
-  userId   Int
-  budgetId Int  @id @default(autoincrement())
-  User     User @relation(fields: [userId], references: [id])
+  budgetId    Int      @id @default(autoincrement())
+  userId      Int
+  User        User     @relation(fields: [userId], references: [id])
+  categoryId  Int
+  Category    Category @relation(fields: [categoryId], references: [id])
 
   amount      Float
   description String?
-  date        DateTime
+  startDate   DateTime
+  endDate     DateTime
 
   @@map("budget")
 }
@@ -50,8 +52,8 @@ model Deposit {
   transactionId Int
   depositId     Int         @id @default(autoincrement())
   Transaction   Transaction @relation(fields: [transactionId], references: [transactionId])
-  categoryId    Int
-  Category      Category    @relation(fields: [categoryId], references: [id])
+  typeId        Int
+  Type          Type        @relation(fields: [typeId], references: [id])
   amount        Float
   description   String?
   date          DateTime
@@ -73,10 +75,19 @@ model Withdrawal {
 }
 
 model Category {
-  id            Int          @id @default(autoincrement())
-  name          String       @unique
-  deposits      Deposit[]
-  withdrawals   Withdrawal[]
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  withdrawals Withdrawal[]
+  budgets Budget[]
 
   @@map("categories")
+}
+
+model Type {
+  id       Int       @id @default(autoincrement())
+  deposits Deposit[]
+  name     String @unique
+
+  @@map("type")
 }

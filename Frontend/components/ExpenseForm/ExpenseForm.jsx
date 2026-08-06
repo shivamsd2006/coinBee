@@ -12,7 +12,7 @@ const ExpenseForm = ({savedData}) => {
 
 
     async function deleteData(id) {
-        const deleteInfo = await fetch(`http://localhost:5000/expenseRoutes/delete/${id}`, {
+        const deleteInfo = await fetch(`http://localhost:5000/api/expenseRoutes/delete/${id}`, {
             method: 'DELETE'
         })
     }
@@ -50,7 +50,7 @@ const ExpenseForm = ({savedData}) => {
 
     async function sendData(data) {
         try {
-            const response = await fetch("http://localhost:5000/expenseRoutes/add", {
+            const response = await fetch("http://localhost:5000/api/expenseRoutes/add", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
@@ -85,7 +85,7 @@ const ExpenseForm = ({savedData}) => {
     return (
 
 
-        <form onSubmit={formData} className='bg-white  flex flex-col  h-[440px] w-[350px] rounded-xl mt-2 mb-2 mr-2 ml-2 p-8' >
+        <form onSubmit={formData} className='bg-[#FFF5EE]  flex flex-col  h-[440px] w-[350px] rounded-xl mt-2 mb-2 mr-2 ml-2 p-8' >
             <div>
                 <h4 className='text-[#FFFFFF] font-syne font-semibold text-[1.2rem]'>Add Expense:</h4>
             </div>

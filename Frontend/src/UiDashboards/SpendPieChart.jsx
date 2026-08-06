@@ -141,4 +141,4 @@ function SpendPieChart({ pieData = [] }) {
   );
 }
 
-export default SpendPieChart;
+export default SpendPieChart;w

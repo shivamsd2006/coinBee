@@ -1,95 +1,106 @@
-import { useState } from "react"
-import Input from "../../UiComponents/Input"
-import Button from "../../UiComponents/Button"
-const BudgetForm = () => {
-    const [description, setDescription] = useState('')
-    const [category, setCategory] = useState('Groceries')
-    const [amount, setAmount] = useState('')
-    const [date, setDate] = useState('')
+import { useState } from 'react';
+import Input  from '../../UiComponents/Input';
+import Button from '../../UiComponents/Button';
 
-    const formData = (e) => {
-        e.preventDefault();
+const BudgetForm = ({ savedData }) => {
+  const [amount,      setAmount]      = useState('');
+  const [description, setDescription] = useState('');
+  const [categoryId,  setCategoryId]  = useState('1');
+  const [startDate,   setStartDate]   = useState('');
+  const [endDate,     setEndDate]     = useState('');
 
-        const [year, month, day] = date.split('-').map(Number);
-        const jsDateObject = new Date(year, month - 1, day);
-        const weekdayFormatter = new Intl.DateTimeFormat('en-US', { weekday: 'long' });
-        const monthFormatter = new Intl.DateTimeFormat('en-US', { month: 'long' });
-        const formattedDayOfWeek = weekdayFormatter.format(jsDateObject);
-        const formattedMonth = monthFormatter.format(jsDateObject);
-        console.log('date --->', date);
-        console.log('day-->', formattedDayOfWeek)
-        console.log('month--->', formattedMonth)
-
-        const user = {
-            Amount: amount,
-            Description: description,
-            DayName: formattedDayOfWeek,
-            MonthName: formattedMonth,
-            Date: date,
-            Category: category
-        }
-        alert('user')
-
-        sendData(user);
+  const formData = async (e) => {
+    e.preventDefault();
+    if (!amount || !startDate || !endDate) {
+      alert('Amount, Start Date, and End Date are required');
+      return;
+    }
+    if (new Date(startDate) >= new Date(endDate)) {
+      alert('End date must be after start date');
+      return;
     }
 
-    async function sendData(data) {
-        try {
-            const response = await fetch("http://localhost:5000/expenseRoutes/add", {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json;charset=utf-8'
-                },
-                body: JSON.stringify(data)
-            })
-            if (response.ok) {
-                const result = await response.json();
-                savedData(result);
+    const body = {
+      Amount:      Number(amount),
+      Description: description,
+      CategoryId:  Number(categoryId),
+      StartDate:   startDate,
+      EndDate:     endDate,
+    };
 
-                console.log("this is the result--->", result);
-            } else {
-                console.log("http error ", response.status);
-            }
+    try {
+      const response = await fetch('http://localhost:5000/api/budgetRoutes/add', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify(body),
+      });
 
-        } catch (error) {
-            console.error("network erorr", error.name);
-            console.error("network message", error.message);
-
-        }
+      if (response.ok) {
+        setAmount('');
+        setDescription('');
+        setStartDate('');
+        setEndDate('');
+        setCategoryId('1');
+        if (savedData) savedData();
+      } else {
+        const err = await response.json();
+        alert(err.error ?? 'Something went wrong');
+      }
+    } catch (error) {
+      console.error('Network error:', error.message);
     }
+  };
 
+  return (
+    <form
+      onSubmit={formData}
+      className='bg-[#FFF5EE] flex flex-col w-[350px] rounded-xl mt-2 mb-2 mx-2 p-8'
+    >
+      <h4 className='text-gray-800 font-semibold text-xl mb-2'>Set Budget</h4>
 
+      <div className='mt-2'>
+        <Input id='Amount' type='number' value={amount}
+          onChange={e => setAmount(e.target.value)} />
+      </div>
+      <div className='mt-2'>
+        <Input id='Description' type='text' value={description}
+          onChange={e => setDescription(e.target.value)} />
+      </div>
+      <div className='mt-2'>
+        <Input id='Start Date' type='date' value={startDate}
+          onChange={e => setStartDate(e.target.value)} />
+      </div>
+      <div className='mt-2'>
+        <Input id='End Date' type='date' value={endDate}
+          onChange={e => setEndDate(e.target.value)} />
+      </div>
 
-    return (
+      <label htmlFor='category' className='text-gray-500 mt-2 mb-1'>Category</label>
+      <select
+        id='category'
+        value={categoryId}
+        onChange={e => setCategoryId(e.target.value)}
+        className='text-gray-600 border-2 border-gray-300 rounded-xl p-2'
+      >
+        <option value='1'>Groceries</option>
+        <option value='2'>Travel</option>
+        <option value='3'>Clothes</option>
+        <option value='4'>Food</option>
+        <option value='5'>EMI</option>
+        <option value='6'>Entertainment</option>
+        <option value='7'>Pet</option>
+        <option value='8'>Housing</option>
+        <option value='9'>Saloon</option>
+        <option value='10'>Gifts</option>
+        <option value='11'>Fuel</option>
+        <option value='12'>Gadgets</option>
+      </select>
 
+      <div className='mt-4 flex justify-center'>
+        <Button title='Add Budget' type='submit' />
+      </div>
+    </form>
+  );
+};
 
-        <form onSubmit={formData} className='bg-white  flex flex-col  h-[440px] w-[350px] rounded-xl mt-2 mb-2 mr-2 ml-2 p-8' >
-            <div>
-                <h4 className='text-[#FFFFFF] font-syne font-semibold text-[1.2rem]'>Set Budget</h4>
-            </div>
-            <div className='mt-2'>
-                <Input id='Amount' type='number' value={amount} onChange={(e) => setAmount(e.target.value)} />
-            </div>
-            <div className='mt-2'>
-                <Input id='Description' type='text' value={description} onChange={(e) => setDescription(e.target.value)} />
-            </div>
-            <div>
-                <Input id='Date' type='date' value={date} onChange={(e) => setDate(e.target.value)} />
-            </div>
-
-            <label htmlFor="category" className=' text-[#8E8E93] text-[1.2rem] mt-2' > Category</label>
-            <select className='text-[#8E8E93] text-[1.2rem] border-2 border-[#8E8E93] rounded-xl p-2' id='category' value={category} onChange={(e) => setCategory(e.target.value)}>
-                <option value="Groceries" >Groceries</option>
-                <option value="Travel">Travel</option>
-                <option value="Clothes">Clothes</option>
-
-            </select>
-
-            <div className='mt-2 flex justify-center '>
-                <Button title='Add' type='submit' />
-            </div>
-        </form>
-    )
-
-}
 export default BudgetForm;

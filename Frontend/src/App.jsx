@@ -10,7 +10,7 @@ function App() {
 
   return (
 
-    <div className='bg-white h-screen w-screen  flex flex-col '>
+    <div className='bg-[#FFF5EE] h-screen w-screen  flex flex-col '>
       <Header />
       <div className='flex flex-col  h-full w-full items-center '>
         <Sidebar />
