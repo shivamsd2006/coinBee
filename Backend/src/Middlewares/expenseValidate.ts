@@ -1,5 +1,5 @@
 w
-import { expenseBody } from '../Requestbody/expenseRequestbody';
+import { expenseBody } from '../src/Requestbody/expenseRequestbody';
 import { Request, Response, NextFunction } from 'express'
 export const expenseValidate = (req: Request, res: Response, next: NextFunction) => {
     const { Expense, Description, Date, Category }: expenseBody = req.body;

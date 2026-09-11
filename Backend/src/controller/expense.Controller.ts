@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { expenseBody } from '../Requestbody/expenseRequestbody';
-import { prisma } from '../prisma';
+import { prisma } from '../../db/prisma';
 import { incomeValidate } from '../Middlewares/incomeValidate';
 import { create } from 'node:domain';
 

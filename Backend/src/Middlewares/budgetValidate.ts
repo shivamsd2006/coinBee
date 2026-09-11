@@ -1,5 +1,5 @@
 
-import { budgetBody } from '../Requestbody/budgetRequestbody';
+import { budgetBody } from '../src/Requestbody/budgetRequestbody';
 import { Request, Response, NextFunction } from 'express'
 export const budgetValidate = (req: Request, res: Response, next: NextFunction) => {
     const { Amount, Description, StartDate, EndDate }: budgetBody = req.body;

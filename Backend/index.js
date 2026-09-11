@@ -7,7 +7,7 @@ app.use(cors({ origin: 'http://localhost:5173' }));
 import {expenseRoutes} from './Routes/expense.Routes'
 import{incomeRoutes} from './Routes/income.Routes'
 import{budgetRoutes} from'./Routes/budget.Routes'
-
+  
 
 app.use(express.json());
 app.use("/api/expenseRoutes",expenseRoutes);

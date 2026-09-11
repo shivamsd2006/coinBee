@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { prisma } from '../prisma';
+import { prisma } from '../../db/prisma';
 
 export const readIncome = async (
   req: Request,
