@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { expenseBody } from '../Requestbody/expenseRequestbody';
 import { prisma } from '../../db/prisma';
-import { incomeValidate } from '../Middlewares/incomeValidate';
+import { incomeValidate } from './incomeValidate';
 import { create } from 'node:domain';
 
 // PIE CHART — GET /expenseRoutes/pie?timeframe=week

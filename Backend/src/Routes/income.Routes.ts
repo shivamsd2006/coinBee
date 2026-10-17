@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { incomeValidate } from '../Middlewares/incomeValidate';
+import { incomeValidate } from '../controller/incomeValidate';
 import { readIncome, postIncome, putIncome } from '../controller/income.Controller';
 
 const router = Router();

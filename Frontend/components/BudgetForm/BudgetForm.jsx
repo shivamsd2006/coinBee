@@ -29,7 +29,7 @@ const BudgetForm = ({ savedData }) => {
     };
 
     try {
-      const response = await fetch('http://localhost:5000/api/budgetRoutes/add', {
+      const response = await fetch('/api/budgetRoutes/add', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify(body),

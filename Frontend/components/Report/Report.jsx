@@ -57,7 +57,7 @@ const settings = {
   nextArrow:      <CustomNextArrow />,
 };
 
-const BASE = 'http://localhost:5000/api/expenseRoutes';
+const BASE = '/api/expenseRoutes';
 
 const Report = () => {
   const [isClicked,  setIsClicked]  = useState(false);

@@ -10,7 +10,7 @@ const Income = () => {
 
 
   function loadIncome(type) {
-    fetch(`http://localhost:5000/api/incomeRoutes/read?type=${type}`)
+    fetch(`/api/incomeRoutes/read?type=${type}`)
       .then(r => r.json())
       .then(data => setIncomeData(data))
       .catch(err => console.error('Income fetch failed:', err));

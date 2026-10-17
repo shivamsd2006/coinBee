@@ -20,7 +20,7 @@ const Budget = () => {
   const [budgetData, setBudgetData] = useState([]);
 
   function loadBudgets() {
-    fetch('http://localhost:5000/api/budgetRoutes/read')
+    fetch('/api/budgetRoutes/read')
       .then(r => r.json())
       .then(data => setBudgetData(data))
       .catch(err => console.error('Budget fetch failed:', err));
