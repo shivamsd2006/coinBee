@@ -2,25 +2,29 @@ import { useState, useEffect } from 'react';
 import IncomeForm from '../IncomeForm/IncomeForm';
 import Button from '../../src/UiComponents/Button';
 import IncomeTypeSwitcher from '../../src/UiComponents/IncomeTypeSwitcher';
+import API_BASE_URL from '../../src/config/api';
 
 const Income = () => {
   const [isClicked, setIsClicked] = useState(false);
   const [incomeData, setIncomeData] = useState([]);
   const [activeType, setActiveType] = useState('all');
 
-
   function loadIncome(type) {
-    fetch(`/api/incomeRoutes/read?type=${type}`)
-      .then(r => r.json())
-      .then(data => setIncomeData(data))
+    fetch(`${API_BASE_URL}/api/incomeRoutes/read?type=${type}`)
+      .then(async (r) => {
+        if (!r.ok) {
+          const text = await r.text();
+          throw new Error(`Server returned ${r.status}: ${text.slice(0, 80)}`);
+        }
+        return r.json();
+      })
+      .then(data => setIncomeData(Array.isArray(data) ? data : []))
       .catch(err => console.error('Income fetch failed:', err));
   }
-
 
   useEffect(() => {
     loadIncome(activeType);
   }, [activeType]);
-
 
   function handleTypeSwitch(type) {
     setActiveType(type);
@@ -29,25 +33,18 @@ const Income = () => {
   return (
     <div className='h-[80%] w-full flex flex-col items-center justify-center gap-4 relative'>
 
-
       <div className='absolute right-5 top-8'>
         <IncomeTypeSwitcher activeType={activeType} onSwitch={handleTypeSwitch} />
       </div>
 
-
       <div className='flex flex-col w-[80%] h-[60vh] overflow-y-scroll [&::-webkit-scrollbar]:hidden'>
-
         {incomeData.length === 0 ? (
-
           <div className='flex items-center justify-center h-full text-gray-500'>
             No income recorded
           </div>
         ) : (
-
           incomeData.map(({ date, entries }) => (
             <div key={date} className='mb-4'>
-
-
               <div className='text-sm text-gray-400 px-3 py-1 mb-1'>
                 {new Date(date).toLocaleDateString('en-IN', {
                   day: 'numeric',
@@ -56,12 +53,10 @@ const Income = () => {
                 })}
               </div>
 
-
               {entries.map(entry => (
                 <div
                   key={entry.depositId}
-                  className=' bg-linear-to-br from-green-400 to-slate-50 w-full mb-2 shrink-0 flex justify-between  items-center px-4 py-3 rounded-xl'>
-
+                  className='bg-linear-to-br from-green-400 to-slate-50 w-full mb-2 shrink-0 flex justify-between items-center px-4 py-3 rounded-xl shadow-sm'>
                   <div className='flex flex-col'>
                     <span className='text-sm font-semibold text-gray-800'>
                       {entry.Type?.name ?? 'Income'}
@@ -71,22 +66,18 @@ const Income = () => {
                     )}
                   </div>
 
-          
                   <span className='text-base font-bold text-green-600'>
                     +₹{entry.amount.toLocaleString('en-IN')}
                   </span>
                 </div>
               ))}
-
             </div>
           ))
         )}
       </div>
 
-      
       {isClicked && (
-        <div className='w-[352px] h-[450px] bg-linear-to-br from-green-400 to-slate-50 flex flex-col justify-end items-center absolute bottom-0 rounded-xl'>
-      
+        <div className='w-[352px] h-[450px] bg-linear-to-br from-green-400 to-slate-50 flex flex-col justify-end items-center absolute bottom-0 rounded-xl shadow-xl'>
           <IncomeForm savedData={() => loadIncome(activeType)} />
         </div>
       )}

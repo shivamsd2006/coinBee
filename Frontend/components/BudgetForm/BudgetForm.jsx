@@ -1,22 +1,26 @@
 import { useState } from 'react';
 import Input  from '../../src/UiComponents/Input';
 import Button from '../../src/UiComponents/Button';
+import API_BASE_URL from '../../src/config/api';
 
 const BudgetForm = ({ savedData }) => {
-  const [amount,      setAmount]      = useState('');
-  const [description, setDescription] = useState('');
-  const [categoryId,  setCategoryId]  = useState('1');
-  const [startDate,   setStartDate]   = useState('');
-  const [endDate,     setEndDate]     = useState('');
+  const [amount,       setAmount]       = useState('');
+  const [description,  setDescription]  = useState('');
+  const [categoryId,   setCategoryId]   = useState('1');
+  const [startDate,    setStartDate]    = useState('');
+  const [endDate,      setEndDate]      = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const formData = async (e) => {
     e.preventDefault();
+    setErrorMessage('');
     if (!amount || !startDate || !endDate) {
-      alert('Amount, Start Date, and End Date are required');
+      setErrorMessage('Amount, Start Date, and End Date are required');
       return;
     }
     if (new Date(startDate) >= new Date(endDate)) {
-      alert('End date must be after start date');
+      setErrorMessage('End date must be after start date');
       return;
     }
 
@@ -28,8 +32,9 @@ const BudgetForm = ({ savedData }) => {
       EndDate:     endDate,
     };
 
+    setIsSubmitting(true);
     try {
-      const response = await fetch('/api/budgetRoutes/add', {
+      const response = await fetch(`${API_BASE_URL}/api/budgetRoutes/add`, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify(body),
@@ -43,20 +48,34 @@ const BudgetForm = ({ savedData }) => {
         setCategoryId('1');
         if (savedData) savedData();
       } else {
-        const err = await response.json();
-        alert(err.error ?? 'Something went wrong');
+        let errText = `Server responded with ${response.status}`;
+        try {
+          const errData = await response.json();
+          if (errData && errData.error) errText = errData.error;
+        } catch {
+          // not JSON
+        }
+        setErrorMessage(errText);
       }
     } catch (error) {
-      console.error('Network error:', error.message);
+      setErrorMessage(error.message || 'Network error occurred');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
     <form
       onSubmit={formData}
-      className='bg-[#FFF5EE] flex flex-col w-[350px] rounded-xl mt-2 mb-2 mx-2 p-8'
+      className='bg-[#FFF5EE] flex flex-col w-[350px] rounded-xl mt-2 mb-2 mx-2 p-8 shadow-xl'
     >
       <h4 className='text-gray-800 font-semibold text-xl mb-2'>Set Budget</h4>
+
+      {errorMessage && (
+        <div className='bg-red-100 border border-red-300 text-red-700 px-3 py-1.5 rounded-lg text-xs mb-2'>
+          {errorMessage}
+        </div>
+      )}
 
       <div className='mt-2'>
         <Input id='Amount' type='number' value={amount}
@@ -97,7 +116,7 @@ const BudgetForm = ({ savedData }) => {
       </select>
 
       <div className='mt-4 flex justify-center'>
-        <Button title='Add Budget' type='submit' />
+        <Button title={isSubmitting ? 'Saving...' : 'Add Budget'} type='submit' />
       </div>
     </form>
   );

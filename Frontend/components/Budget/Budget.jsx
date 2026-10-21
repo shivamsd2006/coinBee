@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import BudgetForm from '../BudgetForm/BudgetForm';
 import Button from '../../src/UiComponents/Button';
-
-
+import API_BASE_URL from '../../src/config/api';
 
 const BAR_COLORS = {
   ok: '#4ade80',   
@@ -21,9 +20,15 @@ const Budget = () => {
   const [budgetData, setBudgetData] = useState([]);
 
   function loadBudgets() {
-    fetch('http://localhost:5000/api/budgetRoutes/read')
-      .then(r => r.json())
-      .then(data => setBudgetData(data))
+    fetch(`${API_BASE_URL}/api/budgetRoutes/read`)
+      .then(async (r) => {
+        if (!r.ok) {
+          const text = await r.text();
+          throw new Error(`Server returned ${r.status}: ${text.slice(0, 80)}`);
+        }
+        return r.json();
+      })
+      .then(data => setBudgetData(Array.isArray(data) ? data : []))
       .catch(err => console.error('Budget fetch failed:', err));
   }
 
@@ -40,7 +45,6 @@ const Budget = () => {
         </div>
       ) : (
         budgetData.map((budget) => {
-          
           const barWidth = Math.min(budget.percentageSpent, 100);
           const color = BAR_COLORS[budget.status];
           const bgColor = BAR_BG[budget.status];
@@ -56,7 +60,7 @@ const Budget = () => {
             >
               {/* Top — category name + description */}
               <div>
-                <p className='text-xl font-semibold text-white'>
+                <p className='text-xl font-semibold text-gray-800'>
                   {budget.categoryName}
                 </p>
                 {budget.description && (
@@ -79,7 +83,7 @@ const Budget = () => {
                 </div>
                 <div className='text-right'>
                   <p className='text-xs text-gray-500'>Budget</p>
-                  <p className='text-lg text-gray-300'>
+                  <p className='text-lg text-gray-400'>
                     ₹{budget.allocatedAmount.toLocaleString('en-IN')}
                   </p>
                 </div>
