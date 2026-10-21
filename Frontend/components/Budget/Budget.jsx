@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import BudgetForm from '../BudgetForm/BudgetForm';
-import Button from '../../UiComponents/Button';
+import Button from '../../src/UiComponents/Button';
+
 
 
 const BAR_COLORS = {
@@ -20,7 +21,7 @@ const Budget = () => {
   const [budgetData, setBudgetData] = useState([]);
 
   function loadBudgets() {
-    fetch('/api/budgetRoutes/read')
+    fetch('http://localhost:5000/api/budgetRoutes/read')
       .then(r => r.json())
       .then(data => setBudgetData(data))
       .catch(err => console.error('Budget fetch failed:', err));

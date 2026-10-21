@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import IncomeForm from '../IncomeForm/IncomeForm';
-import Button from '../../UiComponents/Button';
-import IncomeTypeSwitcher from '../../UiComponents/IncomeTypeSwitcher';
+import Button from '../../src/UiComponents/Button';
+import IncomeTypeSwitcher from '../../src/UiComponents/IncomeTypeSwitcher';
 
 const Income = () => {
   const [isClicked, setIsClicked] = useState(false);

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { budgetValidate } from '../Middlewares/budgetValidate';
+import { budgetValidate } from '../controller/budgetValidate';
 import { readBudget, postBudget, deleteBudget, putBudget } from '../controller/budget.Controller';
 
 const router = Router();

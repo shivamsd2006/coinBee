@@ -1,0 +1,9 @@
+{
+  "name": "coinbee",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "npm --prefix Backend run build:frontend",
+    "start": "npm --prefix Backend start"
+  }
+}

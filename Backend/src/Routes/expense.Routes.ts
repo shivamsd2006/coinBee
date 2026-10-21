@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { expenseValidate } from '../Middlewares/expenseValidate';
+import { expenseValidate } from '../controller/expenseValidate';
 import { deleteExpense, putExpense, readExpense } from '../controller/expense.Controller';
 import { postExpense } from '../controller/expense.Controller';
 import { getPieData, getLineData } from '../controller/expense.Controller';

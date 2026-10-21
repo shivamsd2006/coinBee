@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import Input  from '../../UiComponents/Input';
-import Button from '../../UiComponents/Button';
+import Input  from '../../src/UiComponents/Input';
+import Button from '../../src/UiComponents/Button';
 
 const IncomeForm = ({ savedData }) => {
   const [income,      setIncome]      = useState('');

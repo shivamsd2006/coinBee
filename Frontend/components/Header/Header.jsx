@@ -1,4 +1,4 @@
-import Button from "../../UiComponents/Button";
+import Button from "../../src/UiComponents/Button";
 
 function Header() {
     return (

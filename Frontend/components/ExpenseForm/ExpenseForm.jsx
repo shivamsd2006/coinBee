@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from 'react';
-import Button from '../../UiComponents/Button';
-import Input from '../../UiComponents/Input';
+import Button from '../../src/UiComponents/Button';
+import Input from '../../src/UiComponents/Input';
 const ExpenseForm = ({savedData}) => {
     const [expense, setExpense] = useState("")
     const [description, setDescription] = useState('')

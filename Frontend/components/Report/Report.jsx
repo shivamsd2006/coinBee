@@ -3,8 +3,8 @@ import SpendBarChart      from '../../src/UiDashboards/SpendBarChart';
 import SpendPieChart      from '../../src/UiDashboards/SpendPieChart';
 import SpendLineChart     from '../../src/UiDashboards/SpendLineChart';
 import ExpenseForm        from '../ExpenseForm/ExpenseForm';
-import ExpenseDateSwitcher from '../../UiComponents/ExpenseDateSwitcher';
-import Button             from '../../UiComponents/Button';
+import ExpenseDateSwitcher from '../../src/UiComponents/ExpenseDateSwitcher';
+import Button             from '../../src/UiComponents/Button';
 import SliderImport from 'react-slick';
 const Slider = SliderImport.default ? SliderImport.default : SliderImport;
 const CustomPrevArrow = ({ className, style, onClick }) => (
