@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import Input  from '../../src/UiComponents/Input';
 import Button from '../../src/UiComponents/Button';
-import API_BASE_URL from '../../src/config/api';
 
 const BudgetForm = ({ savedData }) => {
   const [amount,       setAmount]       = useState('');
@@ -34,7 +33,7 @@ const BudgetForm = ({ savedData }) => {
 
     setIsSubmitting(true);
     try {
-      const response = await fetch(`${API_BASE_URL}/api/budgetRoutes/add`, {
+      const response = await fetch('/api/budgetRoutes/add', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify(body),

@@ -5,7 +5,6 @@ import SpendLineChart     from '../../src/UiDashboards/SpendLineChart';
 import ExpenseForm        from '../ExpenseForm/ExpenseForm';
 import ExpenseDateSwitcher from '../../src/UiComponents/ExpenseDateSwitcher';
 import Button             from '../../src/UiComponents/Button';
-import API_BASE_URL       from '../../src/config/api';
 import SliderImport from 'react-slick';
 
 const Slider = SliderImport.default ? SliderImport.default : SliderImport;
@@ -60,7 +59,7 @@ const settings = {
   nextArrow:      <CustomNextArrow />,
 };
 
-const BASE = `${API_BASE_URL}/api/expenseRoutes`;
+const BASE = '/api/expenseRoutes';
 
 const Report = () => {
   const [isClicked,  setIsClicked]  = useState(false);

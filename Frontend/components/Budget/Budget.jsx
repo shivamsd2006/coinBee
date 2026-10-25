@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import BudgetForm from '../BudgetForm/BudgetForm';
 import Button from '../../src/UiComponents/Button';
-import API_BASE_URL from '../../src/config/api';
 
 const BAR_COLORS = {
   ok: '#4ade80',   
@@ -20,7 +19,7 @@ const Budget = () => {
   const [budgetData, setBudgetData] = useState([]);
 
   function loadBudgets() {
-    fetch(`${API_BASE_URL}/api/budgetRoutes/read`)
+    fetch('/api/budgetRoutes/read')
       .then(async (r) => {
         if (!r.ok) {
           const text = await r.text();

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import Input  from '../../src/UiComponents/Input';
 import Button from '../../src/UiComponents/Button';
-import API_BASE_URL from '../../src/config/api';
 
 const IncomeForm = ({ savedData }) => {
   const [income,       setIncome]       = useState('');
@@ -28,7 +27,7 @@ const IncomeForm = ({ savedData }) => {
 
     setIsSubmitting(true);
     try {
-      const response = await fetch(`${API_BASE_URL}/api/incomeRoutes/add`, {
+      const response = await fetch('/api/incomeRoutes/add', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify(body),

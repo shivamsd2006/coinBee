@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://coinbee-nv60.onrender.com*"
+      "destination": "https://coinbee-nv60.onrender.com/api/:path*"
     },
     {
       "source": "/(.*)",

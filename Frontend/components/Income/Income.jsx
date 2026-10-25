@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import IncomeForm from '../IncomeForm/IncomeForm';
 import Button from '../../src/UiComponents/Button';
 import IncomeTypeSwitcher from '../../src/UiComponents/IncomeTypeSwitcher';
-import API_BASE_URL from '../../src/config/api';
 
 const Income = () => {
   const [isClicked, setIsClicked] = useState(false);
@@ -10,7 +9,7 @@ const Income = () => {
   const [activeType, setActiveType] = useState('all');
 
   function loadIncome(type) {
-    fetch(`${API_BASE_URL}/api/incomeRoutes/read?type=${type}`)
+    fetch(`/api/incomeRoutes/read?type=${type}`)
       .then(async (r) => {
         if (!r.ok) {
           const text = await r.text();

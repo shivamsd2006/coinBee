@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import Button from '../../src/UiComponents/Button';
 import Input from '../../src/UiComponents/Input';
-import API_BASE_URL from '../../src/config/api';
 
 const ExpenseForm = ({ savedData }) => {
     const [expense, setExpense] = useState("");
@@ -13,7 +12,7 @@ const ExpenseForm = ({ savedData }) => {
 
     async function deleteData(id) {
         try {
-            await fetch(`${API_BASE_URL}/api/expenseRoutes/delete/${id}`, {
+            await fetch(`/api/expenseRoutes/delete/${id}`, {
                 method: 'DELETE'
             });
             if (savedData) savedData();
@@ -53,7 +52,7 @@ const ExpenseForm = ({ savedData }) => {
         setIsSubmitting(true);
         setErrorMessage('');
         try {
-            const response = await fetch(`${API_BASE_URL}/api/expenseRoutes/add`, {
+            const response = await fetch('/api/expenseRoutes/add', {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
