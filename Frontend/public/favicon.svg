@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <circle cx="50" cy="50" r="45" fill="#FBBF24" stroke="#D97706" stroke-width="4" />
+  <circle cx="50" cy="50" r="36" fill="#FDE68A" />
+  <text x="50" y="58" font-size="34" text-anchor="middle" font-family="sans-serif" font-weight="bold" fill="#78350F">₹</text>
+  <path d="M72 32 C82 22, 92 30, 80 42 Z" fill="#60A5FA" opacity="0.8" />
+  <path d="M28 32 C18 22, 8 30, 20 42 Z" fill="#60A5FA" opacity="0.8" />
+</svg>
