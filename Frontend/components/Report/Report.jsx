@@ -64,7 +64,6 @@ const BASE = '/api/expenseRoutes';
 const Report = () => {
   const [isClicked,  setIsClicked]  = useState(false);
   const [timeFrame,  setTimeFrame]  = useState('week');
-
   const [barData,  setBarData]  = useState([]);
   const [lineData, setLineData] = useState([]);
   const [pieData,  setPieData]  = useState([]);
@@ -105,7 +104,7 @@ const Report = () => {
         <ExpenseDateSwitcher onSwitch={setTimeFrame} />
       </div>
 
-      <div className='relative h-[400px] w-full max-w-[600px]'>
+      <div className='relative h-[399px] w-full max-w-[600px]'>
         <Slider {...settings}>
 
           <div key='bar' className='h-[400px] w-full'>
