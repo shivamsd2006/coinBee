@@ -1,3 +1,5 @@
+import React from 'react';
+
 const TYPES = [
   { label: 'All', value: 'all' },
   { label: 'Salary', value: 'Salary' },
@@ -6,26 +8,26 @@ const TYPES = [
   { label: 'Other', value: 'Other' },
 ];
 
-const IncomeTypeSwitcher = ({ activeType, onSwitch }) => {
+const IncomeTypeSwitcher = ({ activeType = 'all', onSwitch }) => {
   return (
-    <div className='h-[40px] bg-linear-to-br from-green-400 to-slate-50 rounded-xl p-1 flex items-center justify-center'>
-      <div className='bg-[#FFF5EE] rounded-xl flex justify-evenly gap-1 w-full h-[37px] items-center px-1'>
-        {TYPES.map(({ label, value }) => (
+    <div className='inline-flex items-center p-1 bg-[#131926]/90 border border-white/10 rounded-xl shadow-lg backdrop-blur-md gap-1'>
+      {TYPES.map(({ label, value }) => {
+        const isCurrent = activeType === value;
+        return (
           <button
             key={value}
+            type='button'
             onClick={() => onSwitch(value)}
-            className={`
-              px-3 py-1 rounded-lg text-sm font-medium transition-colors cursor-pointer
-              ${activeType === value
-                ? 'bg-green-400 text-white'
-                : 'text-gray-700 hover:text-green-600'
-              }
-            `}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wide transition-all duration-200 cursor-pointer ${
+              isCurrent
+                ? 'bg-[#00D09C] text-[#0A0E17] font-bold shadow-sm shadow-[#00D09C]/30'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
+            }`}
           >
             {label}
           </button>
-        ))}
-      </div>
+        );
+      })}
     </div>
   );
 };

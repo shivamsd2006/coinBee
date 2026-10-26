@@ -1,21 +1,16 @@
 import {
   ResponsiveContainer, LineChart, Line,
-  XAxis, YAxis, Tooltip, CartesianGrid, Dot
+  XAxis, YAxis, Tooltip, CartesianGrid
 } from 'recharts';
 
-const margin = { top: 20, right: 30, left: 50, bottom: 20 };
+const margin = { top: 20, right: 20, left: 10, bottom: 20 };
 
 function CustomTooltip({ payload, label, active }) {
   if (active && payload && payload.length) {
     return (
-      <div style={{
-        background:   '#1a1a18',
-        border:       '1px solid rgba(212,168,67,0.3)',
-        borderRadius: '8px',
-        padding:      '10px 14px',
-      }}>
-        <p style={{ color: '#D4A843', margin: 0, fontWeight: 700 }}>{label}</p>
-        <p style={{ color: '#e8e3d8', margin: 0 }}>
+      <div className="bg-[#151C2C] border border-white/10 rounded-xl px-4 py-2.5 shadow-2xl backdrop-blur-md">
+        <p className="text-xs font-semibold text-slate-400 mb-0.5">{label}</p>
+        <p className="text-base font-bold text-[#00D09C]">
           ₹{payload[0].value.toLocaleString('en-IN')}
         </p>
       </div>
@@ -24,65 +19,60 @@ function CustomTooltip({ payload, label, active }) {
   return null;
 }
 
-// Custom dot — gold filled circle, green glow ring for active dot
 const CustomDot = (props) => {
   const { cx, cy, value } = props;
-  if (value === 0) return null;  // hide dots on zero values
+  if (value === 0) return null;
   return (
     <circle
       cx={cx}
       cy={cy}
-      r={5}
-      fill="#D4A843"
-      stroke="rgba(74,222,128,0.4)"
-      strokeWidth={3}
+      r={4}
+      fill="#00D09C"
+      stroke="#0A0E17"
+      strokeWidth={2}
     />
   );
 };
 
-// lineData: same shape as bar chart — [{ name: 'Mon', uv: 1500 }, ...]
-// name → X-axis label, uv → line height
 function SpendLineChart({ lineData = [] }) {
   return (
     <ResponsiveContainer width="99%" height="100%">
       <LineChart data={lineData} margin={margin}>
-
         <defs>
-          {/* gradient under the line — gold fading to green */}
-          <linearGradient id="lineGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%"   stopColor="#D4A843" stopOpacity={0.3} />
-            <stop offset="100%" stopColor="#4ade80" stopOpacity={0.05} />
+          <linearGradient id="rocketLineGradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#00D09C" stopOpacity={0.35} />
+            <stop offset="100%" stopColor="#00D09C" stopOpacity={0.0} />
           </linearGradient>
         </defs>
 
         <CartesianGrid
           strokeDasharray="3 3"
-          stroke="rgba(255,255,255,0.05)"
+          stroke="rgba(255, 255, 255, 0.05)"
           vertical={false}
         />
         <XAxis
           dataKey="name"
-          stroke="#888580"
-          tick={{ fill: '#888580', fontSize: 12 }}
-          axisLine={{ stroke: 'rgba(212,168,67,0.2)' }}
+          stroke="#64748B"
+          tick={{ fill: '#94A3B8', fontSize: 12, fontWeight: 500 }}
+          axisLine={{ stroke: 'rgba(255, 255, 255, 0.08)' }}
           tickLine={false}
         />
         <YAxis
-          stroke="#888580"
-          tick={{ fill: '#888580', fontSize: 11 }}
-          tickFormatter={v => `₹${v >= 1000 ? `${(v / 1000).toFixed(0)}k` : v}`}
+          stroke="#64748B"
+          tick={{ fill: '#64748B', fontSize: 11 }}
+          tickFormatter={(v) => `₹${v >= 1000 ? `${(v / 1000).toFixed(0)}k` : v}`}
           axisLine={false}
           tickLine={false}
-          width={55}
+          width={50}
         />
-        <Tooltip content={<CustomTooltip />} cursor={{ stroke: 'rgba(212,168,67,0.2)', strokeWidth: 1 }} />
+        <Tooltip content={<CustomTooltip />} cursor={{ stroke: 'rgba(0, 208, 156, 0.25)', strokeWidth: 1.5 }} />
         <Line
           type="monotone"
           dataKey="uv"
-          stroke="#D4A843"
-          strokeWidth={2.5}
+          stroke="#00D09C"
+          strokeWidth={3}
           dot={<CustomDot />}
-          activeDot={{ r: 7, fill: '#D4A843', stroke: 'rgba(74,222,128,0.5)', strokeWidth: 3 }}
+          activeDot={{ r: 6, fill: '#00D09C', stroke: '#FFFFFF', strokeWidth: 2 }}
         />
       </LineChart>
     </ResponsiveContainer>

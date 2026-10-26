@@ -1,15 +1,15 @@
 import { useState } from 'react';
-import Input  from '../../src/UiComponents/Input';
+import Input from '../../src/UiComponents/Input';
 import Button from '../../src/UiComponents/Button';
 
 const IncomeForm = ({ savedData, onClose }) => {
-  const [income,         setIncome]         = useState('');
-  const [description,    setDescription]    = useState('');
-  const [type,           setType]           = useState('1');
-  const [date,           setDate]           = useState('');
-  const [errorMessage,   setErrorMessage]   = useState('');
+  const [income, setIncome] = useState('');
+  const [description, setDescription] = useState('');
+  const [type, setType] = useState('1');
+  const [date, setDate] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-  const [isSubmitting,   setIsSubmitting]   = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const formData = async (e) => {
     e.preventDefault();
@@ -22,24 +22,24 @@ const IncomeForm = ({ savedData, onClose }) => {
     }
 
     const body = {
-      Income:      Number(income),
+      Income: Number(income),
       Description: description,
-      Type:        type,
-      Date:        date,
+      Type: type,
+      Date: date,
     };
 
     setIsSubmitting(true);
     try {
       const response = await fetch('/api/incomeRoutes/add', {
-        method:  'POST',
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify(body),
+        body: JSON.stringify(body),
       });
 
       const result = await response.json().catch(() => null);
 
       if (response.ok && result && !result.error && typeof result !== 'string') {
-        setSuccessMessage('✅ Income added successfully!');
+        setSuccessMessage('Income added successfully!');
         setIncome('');
         setDescription('');
         setDate('');
@@ -63,66 +63,113 @@ const IncomeForm = ({ savedData, onClose }) => {
   };
 
   return (
-    <form
-      onSubmit={formData}
-      className='bg-[#FFF5EE] flex flex-col w-[345px] rounded-xl mt-2 mb-2 mx-2 p-7 shadow-xl relative'
+    <div
+      className='fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md'
+      onClick={(e) => {
+        if (e.target === e.currentTarget && onClose) onClose();
+      }}
     >
-      <div className='flex justify-between items-center mb-2'>
-        <h4 className='text-gray-800 font-semibold text-xl'>Add Income</h4>
-        {onClose && (
-          <button
-            type='button'
-            onClick={onClose}
-            className='text-gray-400 hover:text-gray-700 text-lg font-bold p-1 leading-none'
-            aria-label='Close form'
-          >
-            ✕
-          </button>
-        )}
-      </div>
-
-      {errorMessage && (
-        <div className='bg-red-100 border border-red-300 text-red-700 px-3 py-1.5 rounded-lg text-xs mb-2'>
-          {errorMessage}
-        </div>
-      )}
-
-      {successMessage && (
-        <div className='bg-green-100 border border-green-300 text-green-700 px-3 py-1.5 rounded-lg text-xs mb-2'>
-          {successMessage}
-        </div>
-      )}
-
-      <div className='mt-2'>
-        <Input id='Amount' type='number' value={income}
-          onChange={e => setIncome(e.target.value)} />
-      </div>
-      <div className='mt-2'>
-        <Input id='Description' type='text' value={description}
-          onChange={e => setDescription(e.target.value)} />
-      </div>
-      <div className='mt-2'>
-        <Input id='Date' type='date' value={date}
-          onChange={e => setDate(e.target.value)} />
-      </div>
-
-      <label htmlFor='type' className='text-gray-500 mt-2 mb-1'>Type</label>
-      <select
-        id='type'
-        value={type}
-        onChange={e => setType(e.target.value)}
-        className='text-gray-600 text-base border-2 border-gray-300 rounded-xl p-2'
+      <form
+        onSubmit={formData}
+        className='bg-[#131926] border border-white/10 flex flex-col w-full max-w-sm rounded-2xl p-6 shadow-2xl relative overflow-hidden animate-fadeIn'
       >
-        <option value='1'>Salary</option>
-        <option value='2'>Deposit</option>
-        <option value='3'>Part Time</option>
-        <option value='4'>Other</option>
-      </select>
+        {/* Glow accent */}
+        <div className='absolute top-0 right-0 w-32 h-32 bg-[#00D09C]/10 blur-2xl pointer-events-none rounded-full' />
 
-      <div className='mt-4 flex justify-center'>
-        <Button title={isSubmitting ? 'Adding...' : 'Add'} type='submit' />
-      </div>
-    </form>
+        {/* Header */}
+        <div className='flex justify-between items-center mb-3 relative z-10'>
+          <div className='flex items-center gap-2'>
+            <div className='w-7 h-7 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-xs text-[#00D09C] font-bold'>
+              +₹
+            </div>
+            <h4 className='text-white font-bold text-lg tracking-tight'>Record Income</h4>
+          </div>
+          {onClose && (
+            <button
+              type='button'
+              onClick={onClose}
+              className='text-slate-400 hover:text-white bg-white/5 hover:bg-white/10 w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold transition-all cursor-pointer'
+              aria-label='Close form'
+            >
+              ✕
+            </button>
+          )}
+        </div>
+
+        {/* Feedback Banners */}
+        {errorMessage && (
+          <div className='bg-rose-500/15 border border-rose-500/30 text-rose-300 px-3 py-2 rounded-xl text-xs mb-3 flex items-center gap-1.5'>
+            <span>⚠️</span>
+            <span>{errorMessage}</span>
+          </div>
+        )}
+
+        {successMessage && (
+          <div className='bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 px-3 py-2 rounded-xl text-xs mb-3 flex items-center gap-1.5'>
+            <span>✅</span>
+            <span>{successMessage}</span>
+          </div>
+        )}
+
+        {/* Inputs */}
+        <div className='space-y-3 relative z-10'>
+          <Input
+            id='Amount'
+            type='number'
+            label='Income Amount (₹)'
+            placeholder='0.00'
+            required
+            value={income}
+            onChange={(e) => setIncome(e.target.value)}
+          />
+
+          <Input
+            id='Description'
+            type='text'
+            label='Description (Optional)'
+            placeholder='e.g., Monthly Paycheck, Bonus'
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+
+          <Input
+            id='Date'
+            type='date'
+            label='Date Received'
+            required
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+          />
+
+          <div className='flex flex-col text-left'>
+            <label htmlFor='type' className='text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5'>
+              Income Stream Type
+            </label>
+            <select
+              id='type'
+              value={type}
+              onChange={(e) => setType(e.target.value)}
+              className='w-full bg-[#0B0F19] text-slate-100 border border-white/10 focus:border-[#00D09C] focus:ring-2 focus:ring-[#00D09C]/20 rounded-xl px-4 py-2.5 text-sm transition-all outline-none cursor-pointer'
+            >
+              <option value='1'>Salary</option>
+              <option value='2'>Deposit</option>
+              <option value='3'>Part Time</option>
+              <option value='4'>Other</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Submit */}
+        <div className='mt-5 relative z-10'>
+          <Button
+            title={isSubmitting ? 'Recording Income...' : 'Record Income'}
+            type='submit'
+            disabled={isSubmitting}
+            className='w-full py-3'
+          />
+        </div>
+      </form>
+    </div>
   );
 };
 

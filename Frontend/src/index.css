@@ -1,4 +1,40 @@
 @import "tailwindcss";
-body{
-   font-family: 'Clash Display', sans-serif;
+
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  background-color: #0A0E17;
+  color: #F8FAFC;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* Rocket Money slick custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0A0E17;
+}
+::-webkit-scrollbar-thumb {
+  background: #1E293B;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #00D09C;
+}
+
+/* Slick Carousel overrides for Rocket Money dark theme */
+.slick-dots {
+  bottom: -32px !important;
+}
+.slick-dots li button:before {
+  color: #475569 !important;
+  opacity: 0.5 !important;
+  font-size: 8px !important;
+}
+.slick-dots li.slick-active button:before {
+  color: #00D09C !important;
+  opacity: 1 !important;
 }
