@@ -19,86 +19,37 @@
 
 ---
 
-## ✨ Features
+##  Features
 
-### 1. 📊 Visual Expense Analytics
-- **Dynamic Histograms**: Daily, weekly, monthly, and yearly outflow bars with intelligent grouping.
+### 1.  Visual Expense Analytics
+
 - **Category Breakdown**: Interactive donut pie chart highlighting your highest spending areas (Groceries, Travel, Food, Housing, etc.).
-- **Spending Trajectory**: Smooth line chart showing cumulative spending patterns over time.
 - **One-Touch Timeframe Switcher**: Instant switching between **Day**, **Week**, **Month**, and **Year**.
 
-### 2. 🎯 Rocket Money-Style Category Budgets
+### 2.Category Budgets
 - **Category Caps**: Allocate monthly or custom date-range limits per spending category.
-- **Smart Progress Tracks**:
-  - 🟢 **On Track** (0–80%): Vibrant electric mint indicator.
-  - 🔵 **At Limit** (80–100%): Focused blue alert.
-  - 🔴 **Exceeded** (>100%): Coral-red warning badge with exact "Over by ₹X" calculation.
 - **Remaining Balance**: Live calculation of how much safe spending room you have left.
 
-### 3. 💰 Income & Deposit Streams
-- **Multi-Source Logging**: Track salary, bank deposits, freelance gigs, and side hustles.
-- **Filtered Streams**: Filter deposits by type (`Salary`, `Deposit`, `Part Time`, `Other`) with one click.
-- **Timeline View**: Automatically groups deposits by date for a clean transaction ledger.
-
-### 4. ⚡ Seamless User Experience
-- **Glassmorphic Modals**: Floating dark cards with backdrop blur, light dismiss (click outside to close), and explicit close (`✕`) buttons.
-- **Instant Visual Feedback**: Success toasts and inline error messages confirm every action.
-- **Dark-Mode Fintech UI**: Deep midnight obsidian canvas (`#0A0E17`), electric mint accents (`#00D09C`), and crisp **Plus Jakarta Sans** typography.
+### 3.  Income & Deposit Streams
+-  Track salary, bank deposits, freelance gigs, and side hustles.
+- Filter deposits by type (`Salary`, `Deposit`, `Part Time`, `Other`) with one click.
 
 ---
 
-## 🏗️ Architecture & How It Works
 
-```
-┌────────────────────────────────────────────────────────┐
-│                   Browser Client                       │
-│        (React 19 + Tailwind CSS v4 + Recharts)         │
-└───────────────────────────┬────────────────────────────┘
-                            │
-                            │  Fetch: /api/...
-                            ▼
-┌────────────────────────────────────────────────────────┐
-│                   Vercel Edge Proxy                    │
-│      (Rewrites: /api/:path* ➔ Render Web Service)      │
-└───────────────────────────┬────────────────────────────┘
-                            │
-                            │  Server-to-Server Proxy
-                            ▼
-┌────────────────────────────────────────────────────────┐
-│                 Render Node/Express API                │
-│       (TypeScript + Express + Validation Layers)       │
-└───────────────────────────┬────────────────────────────┘
-                            │
-                            │  Prisma 7 ORM
-                            ▼
-┌────────────────────────────────────────────────────────┐
-│             Supabase PostgreSQL Database               │
-│       (Transaction Pooler on Port 6543 / SSL)          │
-└────────────────────────────────────────────────────────┘
-```
-
-### How the Data Flows
-1. **User Action**: You log an expense or create a budget in the frontend.
-2. **Reverse Proxy Rewrite**: The browser requests `/api/expenseRoutes/add`. Vercel's edge rewrites transparently forward the request to the backend hosted on Render.
-3. **Validation & Controller**: Express runs validation middleware ([expenseValidate.ts](Backend/src/controller/expenseValidate.ts)), ensuring amounts, categories, and dates are valid.
-4. **Database Insertion**: Prisma ORM creates a relational record linking `User ➔ Transaction ➔ Withdrawal` in Supabase PostgreSQL.
-5. **Reactive UI**: The frontend receives the confirmed record, displays a success toast, closes the modal, and refreshes all charts automatically.
-
----
-
-## 🛠️ Tech Stack
+##  Tech Stack
 
 | Layer | Technologies |
 |---|---|
-| **Frontend** | React 19, Vite, Tailwind CSS v4, Recharts, Lucide Icons, React Slick, React Router 7 |
-| **Backend** | Node.js, Express, TypeScript, TSX, CORS, Dotenv |
-| **ORM & Database** | Prisma 7, PostgreSQL (Hosted on Supabase via AWS ap-southeast-1 pooler) |
-| **Deployment** | Vercel (Frontend & Edge Proxy), Render (Backend Web Service) |
-| **Design Language**| Rocket Money Inspired (Midnight Obsidian `#0A0E17`, Mint `#00D09C`, Plus Jakarta Sans) |
+| **Frontend** | React 19, Vite, Tailwind CSS v4, Recharts, Lucide Icons, React Slick |
+| **Backend** | Node.js, Express, TypeScript |
+| **ORM & Database** | Prisma 7, PostgreSQL (Hosted on Supabase ) |
+| **Deployment** | Vercel , Render (Backend Web Service) |
+
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```bash
 coinBee/
@@ -146,7 +97,7 @@ coinBee/
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 Follow these steps to run **coinBee** locally on your machine.
 
@@ -214,7 +165,7 @@ cd coinBee
 
 ---
 
-## 📡 API Reference
+##  API Reference
 
 All routes are mounted under `/api`.
 
@@ -245,26 +196,25 @@ All routes are mounted under `/api`.
 
 ---
 
-## 🗺️ Roadmap
+##  Roadmap
 
-- [x] Complete Rocket Money UI/UX redesign with dark-mode aesthetic
+- [x] UI/UX redesign with dark-mode aesthetic
 - [x] Interactive Recharts charts (Histogram, Donut, Trajectory)
-- [x] Live progress tracks with automated status computation
-- [x] Seamless Vercel-to-Render API proxy rewrites
-- [ ] User Authentication & Multi-Tenancy (Supabase Auth / Clerk)
+- [x] Live progress tracks with automated 
+- [ ] User Authentication 
 - [ ] Monthly Financial Health Score
 - [ ] CSV & PDF Statement Export
-- [ ] Automated Recurring Subscriptions Detection
+
 
 ---
 
-## 🤝 Contributing
+## Contribution
 
-Contributions are welcome! If you'd like to improve coinBee:
+Contributions are welcome!
 
 1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
+2. Create your Feature Branch (`git checkout -b feature/newFeature`)
+3. Commit your Changes (`git commit -m 'Add newFeature'`)
+4. Push to the Branch (`git push origin feature/newFeature`)
 5. Open a Pull Request
 
