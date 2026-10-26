@@ -1,8 +1,7 @@
-
 export interface budgetBody {
-    Amount: number,
-    Description: string,
-    StartDate: number,
-    EndDate:number
-
+    Amount: number;
+    Description?: string;
+    CategoryId?: number | string;
+    StartDate: string | number | Date;
+    EndDate: string | number | Date;
 }

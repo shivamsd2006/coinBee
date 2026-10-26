@@ -2,28 +2,20 @@ import { useState } from 'react';
 import Button from '../../src/UiComponents/Button';
 import Input from '../../src/UiComponents/Input';
 
-const ExpenseForm = ({ savedData }) => {
+const ExpenseForm = ({ savedData, onClose }) => {
     const [expense, setExpense] = useState("");
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState('1');
     const [date, setDate] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
-
-    async function deleteData(id) {
-        try {
-            await fetch(`/api/expenseRoutes/delete/${id}`, {
-                method: 'DELETE'
-            });
-            if (savedData) savedData();
-        } catch (err) {
-            console.error('Delete failed:', err);
-        }
-    }
 
     const formData = (e) => {
         e.preventDefault();
         setErrorMessage('');
+        setSuccessMessage('');
+
         if (!date || !expense) {
             setErrorMessage('Please fill in Amount and Date');
             return;
@@ -51,6 +43,8 @@ const ExpenseForm = ({ savedData }) => {
     async function sendData(data) {
         setIsSubmitting(true);
         setErrorMessage('');
+        setSuccessMessage('');
+
         try {
             const response = await fetch('/api/expenseRoutes/add', {
                 method: "POST",
@@ -60,21 +54,24 @@ const ExpenseForm = ({ savedData }) => {
                 body: JSON.stringify(data)
             });
 
-            if (response.ok) {
+            const result = await response.json().catch(() => null);
+
+            if (response.ok && result && !result.error && typeof result !== 'string') {
+                setSuccessMessage('✅ Expense added successfully!');
                 setExpense('');
                 setDescription('');
                 setDate('');
                 setCategory('1');
+
                 if (savedData) savedData();
+
+                setTimeout(() => {
+                    setSuccessMessage('');
+                    if (onClose) onClose();
+                }, 900);
             } else {
-                let errText = `Server responded with ${response.status}`;
-                try {
-                    const errData = await response.json();
-                    if (errData && errData.error) errText = errData.error;
-                } catch {
-                    // response was HTML or text (e.g. 404 from Vercel)
-                }
-                setErrorMessage(errText);
+                const err = result?.error || (typeof result === 'string' ? result : `Server responded with ${response.status}`);
+                setErrorMessage(err);
             }
         } catch (error) {
             setErrorMessage(error.message || 'Network error occurred');
@@ -84,14 +81,30 @@ const ExpenseForm = ({ savedData }) => {
     }
 
     return (
-        <form onSubmit={formData} className='bg-[#FFF5EE] flex flex-col h-[460px] w-[350px] rounded-xl mt-2 mb-2 mr-2 ml-2 p-8 shadow-xl relative'>
-            <div>
+        <form onSubmit={formData} className='bg-[#FFF5EE] flex flex-col h-[470px] w-[350px] rounded-xl mt-2 mb-2 mr-2 ml-2 p-7 shadow-xl relative'>
+            <div className='flex justify-between items-center'>
                 <h4 className='text-gray-800 font-syne font-semibold text-[1.2rem]'>Add Expense</h4>
+                {onClose && (
+                    <button
+                        type='button'
+                        onClick={onClose}
+                        className='text-gray-400 hover:text-gray-700 text-lg font-bold p-1 leading-none'
+                        aria-label='Close form'
+                    >
+                        ✕
+                    </button>
+                )}
             </div>
 
             {errorMessage && (
                 <div className='bg-red-100 border border-red-300 text-red-700 px-3 py-1.5 rounded-lg text-xs mt-2'>
                     {errorMessage}
+                </div>
+            )}
+
+            {successMessage && (
+                <div className='bg-green-100 border border-green-300 text-green-700 px-3 py-1.5 rounded-lg text-xs mt-2'>
+                    {successMessage}
                 </div>
             )}
 
@@ -105,8 +118,8 @@ const ExpenseForm = ({ savedData }) => {
                 <Input id='Date' type='date' value={date} onChange={(e) => setDate(e.target.value)} />
             </div>
 
-            <label htmlFor="category" className='text-[#8E8E93] text-[1.2rem] mt-2'>Category</label>
-            <select className='text-[#8E8E93] text-[1.2rem] border-2 border-[#8E8E93] rounded-xl p-2' id='category' value={category} onChange={(e) => setCategory(e.target.value)}>
+            <label htmlFor="category" className='text-[#8E8E93] text-[1.1rem] mt-2'>Category</label>
+            <select className='text-[#8E8E93] text-[1rem] border-2 border-[#8E8E93] rounded-xl p-2' id='category' value={category} onChange={(e) => setCategory(e.target.value)}>
                 <option value="1">Groceries</option>
                 <option value="2">Travel</option>
                 <option value="3">Clothes</option>
@@ -121,7 +134,7 @@ const ExpenseForm = ({ savedData }) => {
                 <option value="12">Gadgets</option>
             </select>
 
-            <div className='mt-2 flex justify-center'>
+            <div className='mt-3 flex justify-center'>
                 <Button title={isSubmitting ? 'Adding...' : 'Add'} type='submit' />
             </div>
         </form>

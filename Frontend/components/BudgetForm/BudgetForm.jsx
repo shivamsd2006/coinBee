@@ -2,18 +2,21 @@ import { useState } from 'react';
 import Input  from '../../src/UiComponents/Input';
 import Button from '../../src/UiComponents/Button';
 
-const BudgetForm = ({ savedData }) => {
-  const [amount,       setAmount]       = useState('');
-  const [description,  setDescription]  = useState('');
-  const [categoryId,   setCategoryId]   = useState('1');
-  const [startDate,    setStartDate]    = useState('');
-  const [endDate,      setEndDate]      = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+const BudgetForm = ({ savedData, onClose }) => {
+  const [amount,         setAmount]         = useState('');
+  const [description,    setDescription]    = useState('');
+  const [categoryId,     setCategoryId]     = useState('1');
+  const [startDate,      setStartDate]      = useState('');
+  const [endDate,        setEndDate]        = useState('');
+  const [errorMessage,   setErrorMessage]   = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [isSubmitting,   setIsSubmitting]   = useState(false);
 
   const formData = async (e) => {
     e.preventDefault();
     setErrorMessage('');
+    setSuccessMessage('');
+
     if (!amount || !startDate || !endDate) {
       setErrorMessage('Amount, Start Date, and End Date are required');
       return;
@@ -39,22 +42,25 @@ const BudgetForm = ({ savedData }) => {
         body:    JSON.stringify(body),
       });
 
-      if (response.ok) {
+      const result = await response.json().catch(() => null);
+
+      if (response.ok && result && !result.error && typeof result !== 'string') {
+        setSuccessMessage('✅ Budget set successfully!');
         setAmount('');
         setDescription('');
         setStartDate('');
         setEndDate('');
         setCategoryId('1');
+
         if (savedData) savedData();
+
+        setTimeout(() => {
+          setSuccessMessage('');
+          if (onClose) onClose();
+        }, 900);
       } else {
-        let errText = `Server responded with ${response.status}`;
-        try {
-          const errData = await response.json();
-          if (errData && errData.error) errText = errData.error;
-        } catch {
-          // not JSON
-        }
-        setErrorMessage(errText);
+        const err = result?.error || (typeof result === 'string' ? result : `Server responded with ${response.status}`);
+        setErrorMessage(err);
       }
     } catch (error) {
       setErrorMessage(error.message || 'Network error occurred');
@@ -66,13 +72,31 @@ const BudgetForm = ({ savedData }) => {
   return (
     <form
       onSubmit={formData}
-      className='bg-[#FFF5EE] flex flex-col w-[350px] rounded-xl mt-2 mb-2 mx-2 p-8 shadow-xl'
+      className='bg-[#FFF5EE] flex flex-col w-[350px] rounded-xl mt-2 mb-2 mx-2 p-7 shadow-xl relative'
     >
-      <h4 className='text-gray-800 font-semibold text-xl mb-2'>Set Budget</h4>
+      <div className='flex justify-between items-center mb-2'>
+        <h4 className='text-gray-800 font-semibold text-xl'>Set Budget</h4>
+        {onClose && (
+          <button
+            type='button'
+            onClick={onClose}
+            className='text-gray-400 hover:text-gray-700 text-lg font-bold p-1 leading-none'
+            aria-label='Close form'
+          >
+            ✕
+          </button>
+        )}
+      </div>
 
       {errorMessage && (
         <div className='bg-red-100 border border-red-300 text-red-700 px-3 py-1.5 rounded-lg text-xs mb-2'>
           {errorMessage}
+        </div>
+      )}
+
+      {successMessage && (
+        <div className='bg-green-100 border border-green-300 text-green-700 px-3 py-1.5 rounded-lg text-xs mb-2'>
+          {successMessage}
         </div>
       )}
 

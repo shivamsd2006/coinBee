@@ -76,8 +76,11 @@ const Income = () => {
       </div>
 
       {isClicked && (
-        <div className='w-[352px] h-[450px] bg-linear-to-br from-green-400 to-slate-50 flex flex-col justify-end items-center absolute bottom-0 rounded-xl shadow-xl'>
-          <IncomeForm savedData={() => loadIncome(activeType)} />
+        <div className='w-[352px] h-auto bg-linear-to-br from-green-400 to-slate-50 flex flex-col justify-end items-center absolute bottom-0 rounded-xl shadow-xl z-20'>
+          <IncomeForm
+            savedData={() => loadIncome(activeType)}
+            onClose={() => setIsClicked(false)}
+          />
         </div>
       )}
 

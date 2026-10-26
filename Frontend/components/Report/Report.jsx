@@ -123,8 +123,11 @@ const Report = () => {
       </div>
 
       {isClicked && (
-        <div className='w-[352px] h-[460px] bg-linear-to-br from-green-400 to-slate-50 flex flex-col justify-end items-center mb-15 absolute bottom-0 rounded-xl shadow-2xl z-20'>
-          <ExpenseForm savedData={() => loadAllCharts(timeFrame)} />
+        <div className='w-[352px] h-auto bg-linear-to-br from-green-400 to-slate-50 flex flex-col justify-end items-center mb-15 absolute bottom-0 rounded-xl shadow-2xl z-20'>
+          <ExpenseForm
+            savedData={() => loadAllCharts(timeFrame)}
+            onClose={() => setIsClicked(false)}
+          />
         </div>
       )}
 

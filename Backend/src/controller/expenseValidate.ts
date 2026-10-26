@@ -1,24 +1,33 @@
+import { Request, Response, NextFunction } from 'express';
 import { expenseBody } from '../Requestbody/expenseRequestbody';
-import { Request, Response, NextFunction } from 'express'
+
 export const expenseValidate = (req: Request, res: Response, next: NextFunction) => {
-    const { Expense, Description, Date, Category }: expenseBody = req.body;
-    if (req.body.Description === ('')) {
-        res.json("Description must be entered");
-    } else if (!Number(Expense)) {
-        res.json("Enter Expense in Digits");
-    }
-    else if (Number(Expense) > 9_999_999_999) {
+    const { Expense, Description, Date: expenseDate, Category }: expenseBody = req.body;
 
-        res.status(400).json({ error: 'Amount too large' });
+    if (!Expense || isNaN(Number(Expense)) || Number(Expense) <= 0) {
+        res.status(400).json({ error: 'Please enter a valid expense amount in digits' });
         return;
     }
 
-    else if (Description && Description.length > 200) {
-        res.status(400).json({ error: 'Description max 100 characters' });
+    if (Number(Expense) > 9_999_999_999) {
+        res.status(400).json({ error: 'Amount too large. Max: ₹9,99,99,99,999' });
         return;
-
-    } else {
-        next();
     }
 
-}
+    if (!Category) {
+        res.status(400).json({ error: 'Category is required' });
+        return;
+    }
+
+    if (!expenseDate || isNaN(new Date(expenseDate).getTime())) {
+        res.status(400).json({ error: 'A valid date is required' });
+        return;
+    }
+
+    if (Description && Description.length > 200) {
+        res.status(400).json({ error: 'Description max 200 characters' });
+        return;
+    }
+
+    next();
+};

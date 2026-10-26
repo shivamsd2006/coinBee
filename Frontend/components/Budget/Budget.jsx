@@ -125,8 +125,11 @@ const Budget = () => {
 
       {/* Budget form */}
       {isClicked && (
-        <div className='w-[352px] h-auto bg-linear-to-br from-green-400 to-slate-50 flex flex-col justify-end items-center absolute bottom-0 rounded-xl shadow-xl'>
-          <BudgetForm savedData={loadBudgets} />
+        <div className='w-[352px] h-auto bg-linear-to-br from-green-400 to-slate-50 flex flex-col justify-end items-center absolute bottom-0 rounded-xl shadow-xl z-20'>
+          <BudgetForm
+            savedData={loadBudgets}
+            onClose={() => setIsClicked(false)}
+          />
         </div>
       )}
 
