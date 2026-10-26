@@ -163,36 +163,6 @@ cd coinBee
    http://localhost:5173
    ```
 
----
-
-##  API Reference
-
-All routes are mounted under `/api`.
-
-### Expenses (`/api/expenseRoutes`)
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/read?timeframe=week` | Get expense history grouped by timeframe (`day`, `week`, `month`, `year`) |
-| `GET` | `/pie?timeframe=week` | Get category sums for the donut pie chart |
-| `GET` | `/line?timeframe=week` | Get trend line data points |
-| `POST` | `/add` | Add a new expense (`Expense`, `Description`, `Date`, `Category`) |
-| `DELETE` | `/delete/:id` | Delete an expense by withdrawal ID |
-| `PUT` | `/update/:id` | Update an existing expense |
-
-### Budgets (`/api/budgetRoutes`)
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/read` | Fetch all user budgets with live spent amounts and status calculation |
-| `POST` | `/add` | Create a new budget limit (`Amount`, `CategoryId`, `StartDate`, `EndDate`) |
-| `DELETE` | `/delete/:id` | Remove a budget |
-| `PUT` | `/update/:id` | Modify budget amount or notes |
-
-### Income (`/api/incomeRoutes`)
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/read?type=all` | Fetch deposits grouped by date (filter by `Salary`, `Deposit`, etc.) |
-| `POST` | `/add` | Record a new income stream (`Income`, `Type`, `Date`, `Description`) |
-| `PUT` | `/update/:id` | Update income record |
 
 ---
 
