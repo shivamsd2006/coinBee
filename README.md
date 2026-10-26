@@ -1,4 +1,4 @@
-# 🐝 coinBee
+#  coinBee
 
 > **Your Money, Simplified.** Track expenses, set category budgets, and watch your hive grow.
 
@@ -13,18 +13,9 @@
 
 ## 📖 What is coinBee?
 
-**coinBee** is a modern, full-stack personal finance web application inspired by the sleek, high-trust fintech aesthetic of **Rocket Money**. 
-
-Managing money should never feel like doing homework. Most finance spreadsheets and budget apps are cluttered, overwhelming, or tedious to keep up with. **coinBee** solves this by turning your daily financial activity into beautiful, actionable visual intelligence—helping you understand exactly where your money goes with zero friction.
+**coinBee** is a full-stack personal finance web application. Tracking money should never feel like doing homework. Most finance spreadsheets and budget apps are cluttered, overwhelming, or tedious to keep up with. **coinBee** solves this by turning your daily financial activity into beautiful, actionable visual intelligence—helping you understand exactly where your money goes with zero friction.
 
 ---
-
-## 🎯 Purpose
-
-- **Financial Clarity**: Know your cash flow at a glance without sorting through bank statements.
-- **Disciplined Spending**: Set category limits and see real-time progress before you overspend.
-- **Frictionless Logging**: Add expenses, income, or budgets in seconds with keyboard-friendly floating modals.
-- **Rewarding Visuals**: View your trends on interactive histograms, category distribution donuts, and trajectory curves.
 
 ---
 
@@ -277,14 +268,3 @@ Contributions are welcome! If you'd like to improve coinBee:
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
----
-
-## 📄 License
-
-Distributed under the MIT License. See `LICENSE` for more information.
-
----
-
-<p align="center">
-  Crafted with 🐝 by the <b>coinBee</b> team.
-</p>
